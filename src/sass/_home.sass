@@ -1,0 +1,41 @@
+.home-card
+  flex-direction: column
+  border: 18px solid #C2D2E9
+  justify-content: space-evenly
+  border-radius: 45px
+  align-items: center
+  &:hover
+    .home-card-time
+      opacity: 1
+  &-time
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    background: rgba(0, 0, 0, 0.5)
+    align-items: center
+    justify-content: center
+    display: flex
+    border-radius: 23px
+    flex-direction: column
+    color: #fff
+    font-size: 20px
+    opacity: 0
+    transition: all .2s
+    p
+      &:nth-child(2)
+        margin-top: 5px
+  &-btn
+    border-radius: 100%
+    bg: #C2D2E9
+    width: 50px
+    height: 50px
+    justify-content: center
+    align-items: center
+    background: #C2D2E9
+
+.center
+  display: flex
+  justify-content: center
+  align-items: center
