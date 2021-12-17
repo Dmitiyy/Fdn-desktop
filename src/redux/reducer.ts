@@ -5,9 +5,15 @@ interface IDefaultPayload {
   ini: string;
 }
 
-interface IState {}
+interface IState {
+  signUpBlock: Boolean;
+  activeNavBtn: number;
+};
 
-const initialState = {} as IState;
+const initialState = {
+  signUpBlock: true,
+  activeNavBtn: 0
+} as IState;
 
 const userSlice = createSlice({
   name: 'user',

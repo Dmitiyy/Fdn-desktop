@@ -42,7 +42,7 @@ function App() {
             ].map((item, i) => {
               return (
                 <Fragment key={item.id}>
-                  <Link to={item.path}>
+                  <Link to={item.path} className='home-link'>
                     <BtnNav img={item.photo} bg={i === activeLink ? '#FFFFFF': '#DFE9EE'}
                     boxShadow={i === activeLink ? '0px 10px 22px rgba(0, 0, 0, 0.2)' : ''}
                     click={() => {setActiveLink(i)}} />
@@ -53,9 +53,11 @@ function App() {
           }
           <Flex flexDirection='column' justifyContent='flex-end' 
           h='calc(100vh - ((65px + 26px) * 3) - (60px * 2))' minH='90px'>
-            <BtnNav img={CloseIcon} bg={'#D39696'} click={() => {
-              ipcRenderer.send('btn-exit');
-            }} />
+            <Box mt='26px'>
+              <BtnNav img={CloseIcon} bg={'#D39696'} click={() => {
+                ipcRenderer.send('btn-exit');
+              }} />
+            </Box>
           </Flex>
         </Box>
         <Box ml='26px'>
@@ -87,7 +89,7 @@ interface IBtnNav {
 const BtnNav = ({img, bg, boxShadow, click}: IBtnNav) => {
   return (
     <Box w='65px' minH='65px' bg={bg} boxShadow={boxShadow}
-    borderRadius='12px' cursor='pointer' mt='26px' onClick={() => {
+    borderRadius='12px' cursor='pointer' onClick={() => {
       if (click) {click()}
     }} transition='all .2s'
     d='flex' alignItems='center' justifyContent='center'>
