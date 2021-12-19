@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
+import { Conference } from "./conference.schema";
 
 @Schema()
 export class User {
@@ -12,14 +13,20 @@ export class User {
   @Prop({ default: 'Please establish your job' })
   job: string
 
-  @Prop({ required: true, min: 8, select: false })
+  @Prop({ required: true, min: 8, select: true })
   password: string
 
   @Prop({ required: true, unique: true })
   email: string
 
   @Prop({ default: [] })
-  conferences: Array<any>
+  conferences: Array<Conference>
+
+  @Prop({ default: [] })
+  likedConferences: Array<Conference>
+
+  @Prop()
+  _id: string
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
