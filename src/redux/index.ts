@@ -1,9 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import useReducer from './reducer';
+import useReducer, { nestApi } from './reducer';
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 
 const store = configureStore({
-  reducer: {user: useReducer},
+  reducer: {
+    user: useReducer, 
+    [nestApi.reducerPath]: nestApi.reducer
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(nestApi.middleware),
   devTools: true
 });
 
