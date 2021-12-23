@@ -17,7 +17,7 @@
     "@types/node": "^12.20.37",
     "@types/react": "^17.0.37",
     "@types/react-dom": "^17.0.11",
-    "concurrently": "^6.4.0",
+    "concurrently": "^6.5.1",
     "electron": "^16.0.4",
     "framer-motion": "^4.1.17",
     "postcss-cli": "^9.0.2",
@@ -39,7 +39,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "dev": "concurrently npm start npm run electron"
+    "dev": "concurrently \"npm start\" \"cd ./server && npm run start:dev\""
   },
   "eslintConfig": {
     "extends": [

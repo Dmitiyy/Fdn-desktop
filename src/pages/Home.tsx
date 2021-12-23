@@ -14,7 +14,7 @@ export const Home = () => {
               <Text as='h1' color='#fff' fontSize='50px' fontWeight='700'>
                 Learn. Inspire. Achieve
               </Text>
-              <Text as='p' color='#fff' fontWeight='400' fontSize='30px'>
+              <Text as='p' color='#fff' fontWeight='400' fontSize='30px' mt='10px'>
                 Choose your course and start the learning process
               </Text>
             </Box>
@@ -22,8 +22,10 @@ export const Home = () => {
           </Flex>
         </Box>
         <Box mt='40px'>
-          <Text as='h2' fontSize='40px' fontWeight='700'>Popular</Text>
-          <Grid mt='40px' templateColumns='repeat(3, 305px)' gap='70px'>
+          <Text as='h2' fontSize='21px' fontWeight='700'>All conferences</Text>
+          <Grid mt='40px' templateColumns='repeat(4, 250px)' gap='20px'>
+            <Card />
+            <Card />
             <Card />
             <Card />
             <Card />

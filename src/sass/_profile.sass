@@ -39,3 +39,255 @@
     display: block
     margin: 50px auto
     cursor: default
+
+.profile
+  &__hello
+    font-size: 26px
+    font-weight: 700
+  &__hello-descr
+    font-size: 21px
+    font-weight: 400
+  &__baner
+    width: 100%
+    justify-content: center
+    align-items: center
+    margin-top: 40px
+    border-radius: 12px
+    box-shadow: 0px 6px 17px rgba(0, 0, 0, 0.07)
+    background: #3A4E7A
+    div
+      margin-right: 30px
+      h2
+        font-size: 21px
+        font-weight: 700
+        color: #fff
+      p
+        font-weight: 400
+        font-size: 21px
+        color: #fff
+      button
+        width: 220px
+        height: 50px
+        background: #DFE9EE
+        border-radius: 100px
+        font-weight: 700
+        font-size: 18px
+        margin-top: 27px
+  &__your
+    margin-top: 40px
+    h3
+      font-weight: 700
+      font-size: 21px
+      margin-bottom: 40px
+  &__card
+    width: 220px
+    height: 253px
+    border-radius: 23px
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.3)
+    background: #fff
+    padding: 17px
+    &:hover
+      .profile__card-photo
+        div
+          opacity: 1
+    &-photo
+      width: 186px
+      height: 116px
+      background-image: url(../images/card.png)
+      background-position: center
+      background-repeat: no-repeat
+      background-size: cover
+      border-radius: 12px
+      margin-bottom: 15px
+      div
+        justify-content: center
+        align-items: center
+        background: rgba(0, 0, 0, 0.5)
+        width: 100%
+        height: 100%
+        border-radius: 12px
+        transition: all .2s
+        opacity: 0
+        p
+          margin: 0
+          font-weight: 400
+          color: #fff
+          font-size: 18px
+          &:nth-child(2)
+            margin-top: 5px
+    p
+      font-size: 19px
+      font-weight: 500
+      margin-bottom: 15px
+    &-btn
+      width: 186px
+      position: relative
+      margin-top: -4px
+      button
+        &:nth-child(1)
+          width: 100%
+          background: #DFE9EE
+          border-radius: 100px
+          height: 50px
+          p
+            margin-left: -2px
+            width: 150px
+            margin-top: 13px
+            font-size: 17px !important
+            font-weight: 700 !important
+            color: #000 !important
+        &:nth-child(2)
+          position: absolute
+          top: 0
+          bottom: 0
+          right: 0
+          width: 50px
+          height: 50px
+          border-radius: 100px
+          background: #5e83ba
+          display: flex
+          justify-content: center
+          align-items: center
+          img
+            fill: #fff
+            width: 22px
+  &__liked
+    margin-top: 40px
+    &-title
+      h3
+        font-weight: 700
+        font-size: 21px
+      p
+        font-weight: 500
+        font-size: 21px
+        color: #5e83ba
+        cursor: pointer
+  &__ava
+    img
+      border-radius: 12px
+      margin-right: 17px
+    div
+      h3
+        font-size: 19px
+        font-weight: 700
+        margin-top: 5px
+      p
+        font-size: 19px
+        font-weight: 400
+        margin-top: 2px
+  &__logout-icon
+    width: 30px
+    cursor: pointer
+  &_support
+    margin-top: 40px
+    h3
+      font-weight: 500
+      font-size: 19px
+      margin-bottom: 15px
+  &__chat
+    background: #fff
+    box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.3)
+    border-radius: 23px
+    padding: 17px
+    &-messages
+      width: 100%
+      height: 255px
+      // background: lightgrey
+      // padding: 17px
+      // padding-right: 5px
+      padding-top: 0
+      padding-bottom: 0
+      padding: 0
+      overflow: auto
+      padding-right: 5px
+
+    &-text
+      width: 100%
+      min-height: 50px
+      background: #5E83BA
+      display: flex
+      align-items: center
+      border-radius: 12px
+      padding: 0px !important
+      padding-left: 0px
+      margin-top: 20px
+      textarea
+        min-height: 40px !important
+        border: none
+        border-radius: 12px
+        color: #fff
+        padding-left: 17px
+        width: 215px
+        resize: none
+        max-height: 90px
+        // padding: 17px
+        &:focus
+          border-color: #5E83BA
+          box-shadow: 0 0 0 0px #5E83BA
+      img
+        cursor: pointer
+  &__create
+    margin-top: 40px
+    h3
+      font-weight: 500
+      font-size: 19px
+      margin-bottom: 15px
+    button
+      width: 100%
+      height: 50px
+      background: #DFE9EE
+      border-radius: 100px
+      font-size: 17px
+      font-weight: 700
+  &__chat-dev
+    width: 100%
+    display: flex
+    align-items: flex-end
+    flex-direction: column
+    h3
+      font-weight: 500
+      font-size: 19px
+      margin-bottom: 8px
+    div
+      min-width: 50px
+      min-height: 50px
+      max-width: 100%
+      padding: 15px
+      background: #4C6AAC
+      border-radius: 12px
+      color: #fff
+      font-size: 15px
+      font-weight: 500
+  &__chat-me
+    width: 100%
+    display: flex
+    align-items: flex-start
+    flex-direction: column
+    h3
+      font-weight: 500
+      font-size: 19px
+      margin-bottom: 8px
+    div
+      min-width: 50px
+      min-height: 50px
+      max-width: 100%
+      padding: 15px
+      background: #9AB7DB
+      border-radius: 12px
+      color: #000
+      font-size: 15px
+      font-weight: 500
+
+/* width */
+::-webkit-scrollbar
+  width: 10px
+
+/* Track */
+::-webkit-scrollbar-track
+  // box-shadow: inset 0 0 5px grey
+  border-radius: 10px
+
+/* Handle */
+::-webkit-scrollbar-thumb
+  background: #091d362a
+  border-radius: 12px

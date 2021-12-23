@@ -14,8 +14,8 @@ export class UsersService {
   }
 
   async createUser(data: CreateUserDto): Promise<User> {
-    const newUser = await this.userModel.create({ ...data });
-    return newUser;
+    const newUser = new this.userModel({ ...data });
+    return newUser.save();
   }
 
   async getAllUsers(): Promise<User[]> {
