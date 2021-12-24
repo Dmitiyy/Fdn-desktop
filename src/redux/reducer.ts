@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 interface IDefaultPayload {
   data: any;
@@ -25,17 +24,6 @@ const userSlice = createSlice({
     }
   }
 })
-
-export const nestApi = createApi({
-  reducerPath: 'nestApi',
-  baseQuery: fetchBaseQuery({baseUrl: 'http://localhost:3001/'}),
-  endpoints: (builder) => ({
-    getText: builder.query({
-      query: () => 'users'
-    })
-  })
-})
-export const {useGetTextQuery}: any = nestApi;
 
 export const {setDataDefault} = userSlice.actions;
 export default userSlice.reducer;

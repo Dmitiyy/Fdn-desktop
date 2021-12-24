@@ -1,13 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import useReducer, { nestApi } from './reducer';
+import useReducer from './reducer';
 import { useSelector, TypedUseSelectorHook } from "react-redux";
+import { registrationApi } from './registrationApi';
 
 const store = configureStore({
   reducer: {
     user: useReducer, 
-    [nestApi.reducerPath]: nestApi.reducer
+    [registrationApi.reducerPath]: registrationApi.reducer
   },
-  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(nestApi.middleware),
+  middleware: (getDefaultMiddleware) => 
+  getDefaultMiddleware().concat(registrationApi.middleware),
   devTools: true
 });
 

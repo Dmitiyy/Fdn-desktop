@@ -1,6 +1,7 @@
 .register
   font-family: 'Montserrat', sans-serif !important
   margin: 0 auto
+  width: 454px
   label
     font-size: 20px
     font-weight: 500
@@ -13,6 +14,7 @@
     font-family: 'Montserrat', sans-serif !important
     font-size: 20px
     outline: none
+    width: 100%
     &:focus
       border-color: #091D36
       box-shadow: 0 0 0 1px #091D36
@@ -222,7 +224,7 @@
         max-height: 90px
         // padding: 17px
         &:focus
-          border-color: #5E83BA
+          border-color: #5E83BA !important
           box-shadow: 0 0 0 0px #5E83BA
       img
         cursor: pointer
@@ -291,3 +293,15 @@
 ::-webkit-scrollbar-thumb
   background: #091d362a
   border-radius: 12px
+
+.register__input-error
+  border: 2px solid #da7e7e !important
+.register__p-error
+  color: #da7e7e
+  font-size: 18px !important
+  cursor: default !important
+  margin: 0 !important
+  margin-bottom: 10px !important
+
+.loading
+  opacity: 0.5 !important

@@ -16,6 +16,7 @@ import CloseIcon from './images/close.svg';
 import { Home } from './pages/Home';
 import { Profile } from './pages/Profile';
 const { ipcRenderer } = window.require('electron');
+require('dotenv').config();
 
 export const configAnimationPage = {
   initial: {opacity: 0},
