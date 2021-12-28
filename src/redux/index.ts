@@ -2,14 +2,16 @@ import { configureStore } from '@reduxjs/toolkit';
 import useReducer from './reducer';
 import { useSelector, TypedUseSelectorHook } from "react-redux";
 import { registrationApi } from './registrationApi';
+import { conferencesApi } from './conferencesApi';
 
 const store = configureStore({
   reducer: {
     user: useReducer, 
-    [registrationApi.reducerPath]: registrationApi.reducer
+    [registrationApi.reducerPath]: registrationApi.reducer,
+    [conferencesApi.reducerPath]: conferencesApi.reducer
   },
   middleware: (getDefaultMiddleware) => 
-  getDefaultMiddleware().concat(registrationApi.middleware),
+  getDefaultMiddleware().concat(registrationApi.middleware, conferencesApi.middleware),
   devTools: true
 });
 

@@ -16,8 +16,20 @@ export class Conference {
   @Prop({ required: true })
   photo: string
 
-  @Prop()
+  @Prop({ required: true })
   author: CreateAuthorDto
+
+  @Prop({ required: true })
+  description: string
+
+  @Prop({ default: '' })
+  conferenceLink: string
+
+  @Prop({ default: Date.now() })
+  createdAt: Date
+
+  @Prop({ default: Date.now() })
+  updatedAt: Date
 }
 
 export const ConferenceSchema = SchemaFactory.createForClass(Conference);

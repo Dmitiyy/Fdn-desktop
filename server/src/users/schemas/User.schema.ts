@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
-import { Conference } from "./conference.schema";
+import { Conference } from "../../conferences/schemas/conference.schema";
 
 @Schema()
 export class User {

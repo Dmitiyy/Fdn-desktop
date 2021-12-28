@@ -8,11 +8,13 @@ interface IDefaultPayload {
 interface IState {
   signUpBlock: Boolean;
   activeNavBtn: number;
+  certainConference: any;
 };
 
 const initialState = {
   signUpBlock: true,
-  activeNavBtn: 0
+  activeNavBtn: 0,
+  certainConference: {}
 } as IState;
 
 const userSlice = createSlice({
