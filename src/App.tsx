@@ -15,6 +15,7 @@ import SearchIcon from './images/search.svg';
 import CloseIcon from './images/close.svg';
 import { Home } from './pages/Home';
 import { Profile } from './pages/Profile';
+import { Conference } from './pages/Conference';
 const { ipcRenderer } = window.require('electron');
 require('dotenv').config();
 
@@ -66,6 +67,7 @@ function App() {
             <Routes>
               <Route path='/' element={<Home />} />
               <Route path='/profile' element={<Profile />} />
+              <Route path='/conference' element={<Conference />} />
             </Routes>
           </AnimatePresence>
         </Box>

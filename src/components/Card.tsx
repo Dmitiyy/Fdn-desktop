@@ -1,6 +1,7 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Link } from 'react-router-dom';
 import Photo from '../images/card.png';
 import Heart from '../images/heart.svg';
 import { AppDispatch } from "../redux";
@@ -56,10 +57,12 @@ export const Card = (cardData: ICard) => {
       </Box>
       <Text as='p' fontSize='21px' fontWeight='500'>{cardData.name}</Text>
       <Flex w='180px' justifyContent='space-between'>
-        <Box as='button' fontSize='19px' fontWeight='700'
-        w='120px' h='50px' bg='#C2D2E9' borderRadius='26px' onClick={() => {
-          openConference(cardData.id);
-        }}>Open</Box>
+        <Link to='/conference'>
+          <Box as='button' fontSize='19px' fontWeight='700'
+          w='120px' h='50px' bg='#C2D2E9' borderRadius='26px' onClick={() => {
+            openConference(cardData.id);
+          }}>Open</Box>
+        </Link>
         <Flex as='button' className="home-card-btn">
           <Image src={Heart} alt='heart' w='25px' mt='2px' />
         </Flex>
