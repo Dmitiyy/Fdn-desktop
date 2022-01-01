@@ -23,7 +23,9 @@ export class ConferencesService {
   }
 
   async createOne(data: CreateConferenceDto): Promise<Conference> {
-    const conference = new this.conferenceModel(data);
+    const conference = new this.conferenceModel({
+      ...data, createdAt: new Date(), updatedAt: new Date()
+    });
     return conference.save();
   }
 

@@ -1,7 +1,7 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'
 import Photo from '../images/card.png';
 import Heart from '../images/heart.svg';
 import { AppDispatch } from "../redux";
@@ -19,11 +19,17 @@ export const Card = (cardData: ICard) => {
   const [getOneTrigger, {isLoading, isError, data}] = useGetOneConferenceMutation();
   const [iniDate] = useState<Date>(new Date(cardData.time));
   const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isError && !isLoading && data && data.length !== 0) {
-      dispatch(setDataDefault({ini: 'certainConference', data}))
-      console.log(data);
+      const cardData = {
+        ...data,
+        cardDate: renderDate(),
+        cardTime: transformTime(iniDate)
+      };
+      dispatch(setDataDefault({ini: 'certainConference', data: cardData}));
+      navigate('/conference');
     }
   }, [data]);
 
@@ -43,7 +49,7 @@ export const Card = (cardData: ICard) => {
   }
 
   const openConference = (id: string): void => {
-    getOneTrigger({id});
+    getOneTrigger({id}).unwrap();
   }
 
   return (
@@ -57,12 +63,10 @@ export const Card = (cardData: ICard) => {
       </Box>
       <Text as='p' fontSize='21px' fontWeight='500'>{cardData.name}</Text>
       <Flex w='180px' justifyContent='space-between'>
-        <Link to='/conference'>
-          <Box as='button' fontSize='19px' fontWeight='700'
-          w='120px' h='50px' bg='#C2D2E9' borderRadius='26px' onClick={() => {
-            openConference(cardData.id);
-          }}>Open</Box>
-        </Link>
+        <Box as='button' fontSize='19px' fontWeight='700'
+        w='120px' h='50px' bg='#C2D2E9' borderRadius='26px' onClick={() => {
+          openConference(cardData.id);
+        }}>Open</Box>
         <Flex as='button' className="home-card-btn">
           <Image src={Heart} alt='heart' w='25px' mt='2px' />
         </Flex>

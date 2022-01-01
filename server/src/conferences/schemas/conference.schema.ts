@@ -25,6 +25,9 @@ export class Conference {
   @Prop({ default: '' })
   conferenceLink: string
 
+  @Prop({default: '0'})
+  participants: string
+
   @Prop({ default: Date.now() })
   createdAt: Date
 
