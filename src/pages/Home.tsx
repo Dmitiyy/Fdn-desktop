@@ -28,6 +28,7 @@ export const Home = () => {
   useEffect(() => {
     getAllTrigger({page: `${page}`, limit: '8'});
     setPage(page + 1);
+    window.scrollTo({top: 0, behavior: 'smooth'});
   }, []);
   
   useEffect(() => {

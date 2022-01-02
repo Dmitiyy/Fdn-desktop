@@ -1,15 +1,20 @@
 import { Box, Text, Flex, Image, Grid, Textarea } from "@chakra-ui/react";
+import { Link } from 'react-router-dom';
 import ProfileMainPhoto from '../images/profile_main.png';
 import BinIcon from '../images/bin.svg';
-import TestAva from '../images/test-ava.png';
 import LogOutIcon from '../images/logout.svg';
 import SendIcon from '../images/send.svg';
+import { IUserData } from "../redux/userApi";
+import { useEffect } from "react";
 
-export const AvailableProfile = () => {
+export const AvailableProfile = ({data}: {data: IUserData}) => {
+  useEffect(() => {
+    console.log(data);
+  }, [])
   return (
     <Box d='flex'>
       <Box w='734px' mr='26px'>
-        <Text as='h2' className="profile__hello" mb='5px' mt='-7px'>Hello, John Swith</Text>
+        <Text as='h2' className="profile__hello" mb='5px' mt='-7px'>Hello, {data.name}</Text>
         <Text as='p' className="profile__hello-descr">Don't wait, start your conference right now</Text>
         <Flex className="profile__baner" h='216px'>
           <Box>
@@ -21,63 +26,83 @@ export const AvailableProfile = () => {
         </Flex>
         <Box className="profile__your">
           <Text as='h3'>Your conferences</Text>
-          <Grid templateColumns='repeat(3, 1fr)' gap='37px'>
-            {
-              [0, 1, 2, 3, 4, 5].map(item => {
-                return (
-                  <Box className='profile__card' key={item}>
-                    <Box className='profile__card-photo'>
-                      <Flex flexDirection='column'>
-                        <Text as='p'>16.12.2021</Text>
-                        <Text as='p'>4:30pm</Text>
-                      </Flex>
-                    </Box>
-                    <Text as='p'>Name here</Text>
-                    <Box className='profile__card-btn'>
-                      <Box as='button'><Text as='p'>View conf</Text></Box>
-                      <Box as='button'><Image src={BinIcon} alt='bin' fill='#fff' /></Box>
-                    </Box>
-                  </Box>
-                )
-              })
-            }
-          </Grid>
+          {
+            data.conferences.length === 0 ? (
+              <Text as='p' className="profile__no-conf">
+                You don't have any conference, create frist one <Text as='span'>here</Text>
+              </Text>
+            ) : (
+              <Grid templateColumns='repeat(3, 1fr)' gap='37px'>
+                {
+                  data.conferences.map(item => {
+                    return (
+                      <Box className='profile__card' key={item._id}>
+                        <Box className='profile__card-photo' bg={`url(${item.photo})`}>
+                          <Flex flexDirection='column'>
+                            <Text as='p'>{item.cardDate}</Text>
+                            <Text as='p'>{item.cardTime}</Text>
+                          </Flex>
+                        </Box>
+                        <Text as='p'>{item.name}</Text>
+                        <Box className='profile__card-btn'>
+                          <Box as='button'><Text as='p'>View conf</Text></Box>
+                          <Box as='button'><Image src={BinIcon} alt='bin' fill='#fff' /></Box>
+                        </Box>
+                      </Box>
+                    )
+                  })
+                }
+              </Grid>
+            )
+          }
         </Box>
         <Box className="profile__liked">
           <Flex justifyContent='space-between' className="profile__liked-title">
             <Text as='h3'>Liked conferences</Text>
-            <Text as='p'>View all</Text>
-          </Flex>
-          <Grid templateColumns='repeat(3, 1fr)' gap='37px' mt='40px'>
-          {
-              [0, 1, 2].map(item => {
-                return (
-                  <Box className='profile__card' key={item}>
-                    <Box className='profile__card-photo'>
-                      <Flex flexDirection='column'>
-                        <Text as='p'>16.12.2021</Text>
-                        <Text as='p'>4:30pm</Text>
-                      </Flex>
-                    </Box>
-                    <Text as='p'>Name here</Text>
-                    <Box className='profile__card-btn'>
-                      <Box as='button'><Text as='p'>View conf</Text></Box>
-                      <Box as='button'><Image src={BinIcon} alt='bin' fill='#fff' /></Box>
-                    </Box>
-                  </Box>
-                )
-              })
+            {
+              data.likedConferences.length > 3 ? (
+                <Text as='p'>View all</Text>
+              ) : null
             }
-          </Grid>
+          </Flex>
+          {
+            data.likedConferences.length === 0 ? (
+              <Text as='p' className="profile__no-conf" mt='40px'>
+                You don't have any liked conference
+              </Text>
+            ) : (
+              <Grid templateColumns='repeat(3, 1fr)' gap='37px' mt='40px'>
+                {
+                  data.likedConferences.map(item => {
+                    return (
+                      <Box className='profile__card' key={item._id}>
+                        <Box className='profile__card-photo' bg={`url(${item.photo})`}>
+                          <Flex flexDirection='column'>
+                            <Text as='p'>{item.cardDate}</Text>
+                            <Text as='p'>{item.cardTime}</Text>
+                          </Flex>
+                        </Box>
+                        <Text as='p'>{item.name}</Text>
+                        <Box className='profile__card-btn'>
+                          <Box as='button'><Text as='p'>View conf</Text></Box>
+                          <Box as='button'><Image src={BinIcon} alt='bin' fill='#fff' /></Box>
+                        </Box>
+                      </Box>
+                    )
+                  })
+                }
+              </Grid>
+            )
+          }
         </Box>
       </Box>
       <Box w='297px'>
         <Flex justifyContent='space-between'>
           <Flex className="profile__ava">
-            <Image src={TestAva} alt='ava' />
+            <Box className='profile__ava-img' />
             <Box>
-              <Text as='h3'>John Smith</Text>
-              <Text as='p'>Web-designer</Text>
+              <Text as='h3'>{data.name}</Text>
+              <Text as='p'>{data.job}</Text>
             </Box>
           </Flex>
           <Image src={LogOutIcon} alt='logout' className="profile__logout-icon" />

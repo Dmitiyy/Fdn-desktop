@@ -1,8 +1,7 @@
 import { Box, Flex, Image, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from 'react-router-dom'
-import Photo from '../images/card.png';
+import { useNavigate } from 'react-router-dom';
 import Heart from '../images/heart.svg';
 import { AppDispatch } from "../redux";
 import { useGetOneConferenceMutation } from "../redux/conferencesApi";
@@ -55,7 +54,8 @@ export const Card = (cardData: ICard) => {
   return (
     <Flex w='250px' h='290px' className="home-card" >
       <Box w='180px' h='112px' position='relative' mt='2px'>
-        <Image src={Photo} alt='card' w='100%' h='100%' borderRadius='23px' />
+        <Box className="home__card-photo" w='100%' h='100%' borderRadius='23px'
+        backgroundImage={`url(${cardData.photo})`} />
         <Flex className="home-card-time">
           <Text as='p'>{renderDate()}</Text>
           <Text as='p'>{transformTime(iniDate)}</Text>

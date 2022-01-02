@@ -95,10 +95,9 @@
     &-photo
       width: 186px
       height: 116px
-      background-image: url(../images/card.png)
-      background-position: center
-      background-repeat: no-repeat
-      background-size: cover
+      background-position: center !important
+      background-repeat: no-repeat !important
+      background-size: cover !important
       border-radius: 12px
       margin-bottom: 15px
       div
@@ -165,9 +164,16 @@
         color: #5e83ba
         cursor: pointer
   &__ava
-    img
+    &-img
+      width: 69px
+      height: 69px
+      background: url(../images/test-ava.png)
+      background-repeat: no-repeat !important
+      background-size: cover !important
+      background-position: center !important
       border-radius: 12px
       margin-right: 17px
+      cursor: pointer
     div
       h3
         font-size: 19px
@@ -177,6 +183,8 @@
         font-size: 19px
         font-weight: 400
         margin-top: 2px
+        width: 180px
+        max-height: 25px
   &__logout-icon
     width: 30px
     cursor: pointer
@@ -305,3 +313,13 @@
 
 .loading
   opacity: 0.5 !important
+
+.profile-loading
+  width: 110px
+  margin-top: 50px !important
+
+.profile__no-conf
+  font-size: 19px !important
+  span
+    cursor: pointer
+    font-weight: 700

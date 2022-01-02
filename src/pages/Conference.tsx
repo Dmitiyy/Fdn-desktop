@@ -6,6 +6,10 @@ import { useAppSelector } from "../redux";
 
 export const Conference = () => {
   const data = useAppSelector(state => state.user.certainConference);
+
+  useEffect(() => {
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }, []);
   
   return (
     <motion.div {...configAnimationPage}>
@@ -46,7 +50,7 @@ export const Conference = () => {
             <Text as='p' className='conf__info-participants' mt='19px'>
               Participants: <Text as='span'>{data.participants}</Text>
             </Text>
-            <Box as='button' className='conf__info-btn' mt='23px'>Join us</Box>
+            <Box as='button' className='conf__info-btn' mt='23px' w='100%'>Join us</Box>
           </Box>
         </Flex>
       </Box>
