@@ -10,6 +10,11 @@ export interface IUserData {
   updatedAt?: string
 }
 
+interface ILikeData {
+  userId: string;
+  conferenceId: string;
+}
+
 export const userApi = createApi({
   reducerPath: 'userApi',
   baseQuery: fetchBaseQuery({baseUrl: process.env.REACT_APP_API_BASE_URL}),
@@ -23,8 +28,18 @@ export const userApi = createApi({
           'Authorization': `Bearer ${token}`
         }
       })
+    }),
+    like: builder.mutation({
+      query: (data: ILikeData) => ({
+        url: `users/addToFavourite`,
+        method: 'PATCH',
+        headers: {
+          'Security-password': process.env.REACT_APP_SECURITY_PASSWORD
+        },
+        body: data
+      })
     })
   })
 })
 
-export const {useGetProfileDataQuery} = userApi;
+export const {useGetProfileDataQuery, useLikeMutation} = userApi;

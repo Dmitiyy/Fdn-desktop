@@ -8,9 +8,9 @@ import { IUserData } from "../redux/userApi";
 import { useEffect } from "react";
 
 export const AvailableProfile = ({data}: {data: IUserData}) => {
-  useEffect(() => {
-    console.log(data);
-  }, [])
+  // useEffect(() => {
+  //   console.log(data);
+  // }, [])
   return (
     <Box d='flex'>
       <Box w='734px' mr='26px'>

@@ -1,5 +1,5 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Body, Controller, Get, Patch } from '@nestjs/common';
+import { FavouriteUserDto } from './dto/favourite-user.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
@@ -10,5 +10,10 @@ export class UsersController {
   @Get()
   getAllUsers(): Promise<User[]> {
     return this.usersService.getAllUsers();
+  }
+
+  @Patch('addToFavourite')
+  addToFavourite(@Body() data: FavouriteUserDto) {
+    return this.usersService.addToFavourite(data);
   }
 }

@@ -11,7 +11,9 @@ import {ReactComponent as LoadingSvg} from '../images/loading.svg';
 export const Profile = () => {
   const [cookies] = useCookies(['token']);
   const [showRegistration, setShowRegistration] = useState<Boolean>(true);
-  const { data, isLoading, isError } = useGetProfileDataQuery(cookies.token);
+  const { data, isLoading, isError } = useGetProfileDataQuery(cookies.token, {
+    refetchOnMountOrArgChange: true,
+  });
 
   useEffect(() => {
     if (cookies.token) {setShowRegistration(false)}

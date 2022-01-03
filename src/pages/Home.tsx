@@ -6,6 +6,7 @@ import { motion } from "framer-motion"
 import { configAnimationPage } from "../App";
 import { useGetAllConferencesMutation } from "../redux/conferencesApi";
 import LoadingSvg from '../images/loading.svg';
+import { useProfile } from "../hooks/useProfile";
 
 export interface IConference {
   _id: string,
@@ -24,6 +25,10 @@ export const Home = () => {
   const [page, setPage] = useState<number>(1);
   const [showLoadBtn, setShowLoadBtn] = useState<Boolean>(true);
   const [generatedData, setGeneratedData] = useState<Array<IConference>>([]);
+  const profile = useProfile();
+  const [profileId, setProfileId] = useState({});
+  
+  useEffect(() => {if (profile) {setProfileId(profile)}}, [profile]);
 
   useEffect(() => {
     getAllTrigger({page: `${page}`, limit: '8'});
@@ -71,7 +76,8 @@ export const Home = () => {
               [...generatedData].map((item: IConference) => {
                 return (
                   <Fragment key={item._id}>
-                    <Card id={item._id} name={item.name} photo={item.photo} time={item.time} />
+                    <Card id={item._id} name={item.name} 
+                    photo={item.photo} time={item.time} profileId={profileId} />
                   </Fragment>
                 )
               }) : null

@@ -7,6 +7,6 @@ import { Conference, ConferenceSchema } from './schemas/conference.schema';
 @Module({
   imports: [MongooseModule.forFeature([{ name: Conference.name, schema: ConferenceSchema }])],
   controllers: [ConferencesController],
-  providers: [ConferencesService]
+  providers: [ConferencesService],
 })
 export class ConferencesModule { }
