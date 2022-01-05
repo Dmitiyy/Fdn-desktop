@@ -17,6 +17,21 @@ interface ICard {
   profileId: any, 
 }
 
+export const transformTime = (date: Date) => {
+  let hours = date.getHours();
+  let minutes: string | number = date.getMinutes();
+  const ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  const strTime = hours + ':' + minutes + ' ' + ampm;
+  return strTime;
+}
+
+export const renderDate = (date: Date) => {
+  return date.toLocaleString().split(',')[0];
+}
+
 export const Card = (cardData: ICard) => {
   const [getOneTrigger, {isLoading, isError, data}] = useGetOneConferenceMutation();
   const [iniDate] = useState<Date>(new Date(cardData.time));
@@ -33,7 +48,7 @@ export const Card = (cardData: ICard) => {
       if (isExist) {setLike(true)}
       else {setLike(false)};
     }
-  }, []);
+  }, [cardData.profileId]);
 
   useEffect(() => {
     if (!isError && !isLoading && data && data.length !== 0) {
@@ -46,21 +61,6 @@ export const Card = (cardData: ICard) => {
       navigate('/conference');
     }
   }, [data]);
-
-  const transformTime = (date: Date) => {
-    let hours = date.getHours();
-    let minutes: string | number = date.getMinutes();
-    const ampm = hours >= 12 ? 'pm' : 'am';
-    hours = hours % 12;
-    hours = hours ? hours : 12;
-    minutes = minutes < 10 ? '0' + minutes : minutes;
-    const strTime = hours + ':' + minutes + ' ' + ampm;
-    return strTime;
-  }
-
-  const renderDate = (date: Date) => {
-    return date.toLocaleString().split(',')[0];
-  }
 
   const openConference = (id: string): void => {
     getOneTrigger({id}).unwrap();

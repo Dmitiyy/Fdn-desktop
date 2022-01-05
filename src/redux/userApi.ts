@@ -8,6 +8,7 @@ export interface IUserData {
   likedConferences: Array<any>
   name?: string
   updatedAt?: string
+  _id?: string
 }
 
 interface ILikeData {

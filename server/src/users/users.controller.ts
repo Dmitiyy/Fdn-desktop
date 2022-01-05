@@ -1,11 +1,15 @@
 import { Body, Controller, Get, Patch } from '@nestjs/common';
-import { FavouriteUserDto } from './dto/favourite-user.dto';
+import { ConferencesService } from 'src/conferences/conferences.service';
+import { FavouriteUserDto, FavouriteUserConfDto } from './dto/favourite-user.dto';
 import { User } from './schemas/user.schema';
 import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly conferenceService: ConferencesService
+  ) { }
 
   @Get()
   getAllUsers(): Promise<User[]> {
@@ -13,7 +17,9 @@ export class UsersController {
   }
 
   @Patch('addToFavourite')
-  addToFavourite(@Body() data: FavouriteUserDto) {
-    return this.usersService.addToFavourite(data);
+  async addToFavourite(@Body() data: FavouriteUserDto) {
+    const conference = await this.conferenceService.getOne({ id: data.conferenceId });
+    const result: FavouriteUserConfDto = { conference, ...data };
+    return this.usersService.addToFavourite(result);
   }
 }

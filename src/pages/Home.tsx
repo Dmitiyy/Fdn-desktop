@@ -25,10 +25,14 @@ export const Home = () => {
   const [page, setPage] = useState<number>(1);
   const [showLoadBtn, setShowLoadBtn] = useState<Boolean>(true);
   const [generatedData, setGeneratedData] = useState<Array<IConference>>([]);
-  const profile = useProfile();
+  const {profileData, profileLoading} = useProfile();
   const [profileId, setProfileId] = useState({});
   
-  useEffect(() => {if (profile) {setProfileId(profile)}}, [profile]);
+  useEffect(() => {
+    if (profileData) {
+      setProfileId(profileData);
+    }
+  }, [profileData]);
 
   useEffect(() => {
     getAllTrigger({page: `${page}`, limit: '8'});
@@ -72,7 +76,7 @@ export const Home = () => {
           }
           <Grid mt='40px' templateColumns='repeat(4, 250px)' gap='20px'>
             {
-              generatedData ? 
+              generatedData && !profileLoading ? 
               [...generatedData].map((item: IConference) => {
                 return (
                   <Fragment key={item._id}>
@@ -86,11 +90,13 @@ export const Home = () => {
           {
             showLoadBtn ? (
               <Flex justifyContent='center' w='100%' mt='20px'>
-                <Box as='button' className={isLoading ? 'home-load loading' : 'home-load'} 
-                disabled={isLoading} onClick={() => {
+                <Box as='button' className={isLoading || profileLoading ? 
+                'home-load loading' : 'home-load'} 
+                disabled={isLoading || profileLoading} onClick={() => {
                   getAllTrigger({page: `${page}`, limit: '8'});
                   setPage(page + 1);
-                }}>{isLoading ? 'Loading' : isError ? 'Error, try again later' : 'Load more'}</Box>
+                }}>{isLoading || profileLoading ? 'Loading' : 
+                isError ? 'Error, try again later' : 'Load more'}</Box>
               </Flex>
             ) : null 
           }
