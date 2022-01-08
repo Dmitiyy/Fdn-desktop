@@ -7,7 +7,7 @@ export class Conference {
   @Prop({ required: true })
   name: string
 
-  @Prop({ required: true })
+  @Prop()
   date: string
 
   @Prop({ required: true })

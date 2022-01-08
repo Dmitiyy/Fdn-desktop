@@ -1,11 +1,12 @@
 import { Box, Text, Flex, Image, Grid, Textarea } from "@chakra-ui/react";
+import { AnimatePresence } from 'framer-motion';
 import ProfileMainPhoto from '../images/profile_main.png';
 import { useDispatch } from "react-redux";
 import BinIcon from '../images/bin.svg';
 import LogOutIcon from '../images/logout.svg';
 import SendIcon from '../images/send.svg';
 import { IUserData, useLikeMutation } from "../redux/userApi";
-import { AppDispatch } from "../redux";
+import { AppDispatch, useAppSelector } from "../redux";
 import { useNavigate } from 'react-router-dom';
 import { renderDate, transformTime } from "./Card";
 import { setDataDefault } from "../redux/reducer";
@@ -17,7 +18,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
   const dispatch = useDispatch<AppDispatch>();
   const [likeTrigger] = useLikeMutation();
   const [likedConferences, setLikedConferences] = useState<Array<any>>([]);
-  const [openCreateConf, setOpenCreateConf] = useState<Boolean>(false);
+  const openCreateConf = useAppSelector(state => state.user.openModal);
 
   useEffect(() => {
     setLikedConferences(data.likedConferences);
@@ -45,7 +46,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
   }
 
   const handleCreateConf = () => {
-    setOpenCreateConf(true);
+    dispatch(setDataDefault({data: true, ini: 'openModal'}));
   }
 
   return (
@@ -77,13 +78,15 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
                         <Box className='profile__card' key={item._id}>
                           <Box className='profile__card-photo' bg={`url(${item.photo})`}>
                             <Flex flexDirection='column'>
-                              <Text as='p'>{item.cardDate}</Text>
-                              <Text as='p'>{item.cardTime}</Text>
+                              <Text as='p'>{renderDate(new Date(item.time))}</Text>
+                              <Text as='p'>{transformTime(new Date(item.time))}</Text>
                             </Flex>
                           </Box>
                           <Text as='p'>{item.name}</Text>
                           <Box className='profile__card-btn'>
-                            <Box as='button'><Text as='p'>View conf</Text></Box>
+                            <Box as='button' onClick={() => {openConference(item)}}>
+                              <Text as='p'>View conf</Text>
+                            </Box>
                             <Box as='button'><Image src={BinIcon} alt='bin' fill='#fff' /></Box>
                           </Box>
                         </Box>
@@ -182,9 +185,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
           </Box>
         </Box>
       </Box>
-      {
-        openCreateConf ? (<CreateConf />) : null
-      }
+      <AnimatePresence>{openCreateConf ? (<CreateConf />) : null}</AnimatePresence>
     </Fragment>
   )
 }

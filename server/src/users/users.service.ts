@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FavouriteUserConfDto } from './dto/favourite-user.dto';
+import { YourUserDto } from './dto/your-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
@@ -42,6 +43,14 @@ export class UsersService {
         }
         await user.updateOne({ likedConferences: ourlikedConferences });
       }
+    }
+    return user;
+  }
+
+  async addToYour(data: YourUserDto): Promise<User> {
+    const user = await this.userModel.findById(data.userId);
+    if (user && data.conference) {
+      await user.updateOne({ conferences: [...user.conferences, data.conference] });
     }
     return user;
   }

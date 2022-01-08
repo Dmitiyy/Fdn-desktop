@@ -6,11 +6,15 @@ import { Conference, ConferenceDocument } from './schemas/conference.schema';
 import * as moment from 'moment-timezone';
 import { CreatePaginationDto } from './dto/create-pagination.dto';
 import { GetConferenceDto } from './dto/get-conference.dto';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ConferencesService {
   constructor(
-    @InjectModel(Conference.name) private conferenceModel: Model<ConferenceDocument>
+    @InjectModel(Conference.name) private conferenceModel: Model<ConferenceDocument>,
+    private readonly cloudinaryService: CloudinaryService,
+    private readonly usersService: UsersService
   ) { }
 
   async getAll(data: CreatePaginationDto): Promise<Conference[]> {
@@ -23,10 +27,13 @@ export class ConferencesService {
   }
 
   async createOne(data: CreateConferenceDto): Promise<Conference> {
+    const uploadedImage = await this.cloudinaryService.uploadImage(data.photo);
     const conference = new this.conferenceModel({
-      ...data, createdAt: new Date(), updatedAt: new Date()
+      ...data, createdAt: new Date(), updatedAt: new Date(), photo: uploadedImage.url
     });
-    return conference.save();
+    await conference.save();
+    await this.usersService.addToYour({ userId: data.userId, conference });
+    return conference;
   }
 
   transformTime(time: string, author: string): string {
@@ -48,6 +55,7 @@ export class ConferencesService {
 
   async getOne(data: GetConferenceDto): Promise<Conference> {
     const conference = await this.conferenceModel.findById(data.id);
-    return this.transformDataWithCertainTime([conference])[0];
+    // return this.transformDataWithCertainTime([conference])[0];
+    return conference;
   }
 }

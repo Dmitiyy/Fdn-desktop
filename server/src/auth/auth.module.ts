@@ -7,11 +7,13 @@ import { LocalStrategy } from './local.strategy';
 import { AuthController } from './auth.controller';
 import { jwtConstants } from './constants';
 import { JwtStrategy } from './jwt.strategy';
+import { ConferencesModule } from 'src/conferences/conferences.module';
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
+    ConferencesModule,
     JwtModule.register({
       secret: jwtConstants.secret,
       signOptions: { expiresIn: '30d' },

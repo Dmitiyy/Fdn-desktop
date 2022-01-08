@@ -9,12 +9,16 @@ interface IState {
   signUpBlock: Boolean;
   activeNavBtn: number;
   certainConference: any;
+  openModal: Boolean;
+  yourConfs: Array<any>;
 };
 
 const initialState = {
   signUpBlock: true,
   activeNavBtn: 0,
-  certainConference: {}
+  certainConference: {},
+  openModal: false,
+  yourConfs: []
 } as IState;
 
 const userSlice = createSlice({

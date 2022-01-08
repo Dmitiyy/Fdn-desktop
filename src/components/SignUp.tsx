@@ -86,16 +86,17 @@ interface ICustomInput {
   type: string;
   errors: any;
   touched: any;
+  placeholder?: string;
 }
 
-export const CustomInput = ({name, type, errors, touched}: ICustomInput) => {
+export const CustomInput = ({name, type, errors, touched, placeholder}: ICustomInput) => {
   const [field] = useField(name);
   const isFieldError: Boolean = errors[name] && touched[name];
   const classes: string = isFieldError ? 'register__input-error' : '';
 
   return (
     <Fragment>
-      <Input id={name} type={type} {...field} className={classes} />
+      <Input id={name} type={type} {...field} className={classes} placeholder={placeholder} />
       <Text as='p' className='register__p-error'>{isFieldError ? errors[name] : ''}</Text>
     </Fragment>
   )

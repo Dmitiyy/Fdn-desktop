@@ -8,4 +8,6 @@ export class CreateConferenceDto {
   readonly author: CreateAuthDto;
   readonly description: string;
   readonly conferenceLink: string;
+  readonly userId: string;
+  readonly participants: string;
 }
