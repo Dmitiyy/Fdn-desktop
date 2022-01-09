@@ -12,17 +12,22 @@ import { renderDate, transformTime } from "./Card";
 import { setDataDefault } from "../redux/reducer";
 import { Fragment, useEffect, useState } from "react";
 import { CreateConf } from "./CreateConf";
+import {ReactComponent as NoAvatar} from '../images/no_avatar.svg';
 
 export const AvailableProfile = ({data}: {data: IUserData}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const [likeTrigger] = useLikeMutation();
   const [likedConferences, setLikedConferences] = useState<Array<any>>([]);
+  const createdConferences = useAppSelector(state => state.user.createdConfs);
+
+  // const [createdConferences, setCreatedConferences] = useState<Array<any>>([]);
   const openCreateConf = useAppSelector(state => state.user.openModal);
 
+  useEffect(() => {setLikedConferences(data.likedConferences)}, [data.likedConferences]);
   useEffect(() => {
-    setLikedConferences(data.likedConferences);
-  }, [data.likedConferences]);
+    dispatch(setDataDefault({ini: 'createdConfs', data: data.conferences}));
+  }, [data.conferences]);
 
   const openConference = (conference: any): void => {
     const cardData = {
@@ -66,14 +71,14 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
           <Box className="profile__your">
             <Text as='h3'>Your conferences</Text>
             {
-              data.conferences.length === 0 ? (
+              createdConferences.length === 0 ? (
                 <Text as='p' className="profile__no-conf">
                   You don't have any conference, create frist one <Text as='span'>here</Text>
                 </Text>
               ) : (
                 <Grid templateColumns='repeat(3, 1fr)' gap='37px'>
                   {
-                    data.conferences.map(item => {
+                    createdConferences.map((item: any) => {
                       return (
                         <Box className='profile__card' key={item._id}>
                           <Box className='profile__card-photo' bg={`url(${item.photo})`}>
@@ -144,7 +149,11 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
         <Box w='297px'>
           <Flex justifyContent='space-between'>
             <Flex className="profile__ava">
-              <Box className='profile__ava-img' />
+              {
+                data.photo?.length !== 0 ? (
+                  <Box className='profile__ava-img' />
+                ) : (<NoAvatar className="no-avatar" />)
+              }
               <Box>
                 <Text as='h3'>{data.name}</Text>
                 <Text as='p'>{data.job}</Text>
@@ -185,7 +194,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
           </Box>
         </Box>
       </Box>
-      <AnimatePresence>{openCreateConf ? (<CreateConf />) : null}</AnimatePresence>
+      <AnimatePresence>{openCreateConf ? (<CreateConf user={data} />) : null}</AnimatePresence>
     </Fragment>
   )
 }

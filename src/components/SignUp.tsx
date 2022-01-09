@@ -1,4 +1,4 @@
-import { Box, Text, Input, Flex } from "@chakra-ui/react"
+import { Box, Text, Input, Flex, Textarea } from "@chakra-ui/react"
 import { useDispatch } from "react-redux"
 import { AppDispatch } from "../redux"
 import { setDataDefault } from "../redux/reducer";
@@ -87,17 +87,26 @@ interface ICustomInput {
   errors: any;
   touched: any;
   placeholder?: string;
+  textarea?: Boolean; 
 }
 
-export const CustomInput = ({name, type, errors, touched, placeholder}: ICustomInput) => {
+export const CustomInput = ({name, type, errors, touched, placeholder, textarea}: ICustomInput) => {
   const [field] = useField(name);
   const isFieldError: Boolean = errors[name] && touched[name];
   const classes: string = isFieldError ? 'register__input-error' : '';
-
+  
   return (
     <Fragment>
-      <Input id={name} type={type} {...field} className={classes} placeholder={placeholder} />
-      <Text as='p' className='register__p-error'>{isFieldError ? errors[name] : ''}</Text>
+      <Box d='flex' flexDirection='column' w='100% !important'>
+        {
+          textarea ? (
+            <Textarea id={name} {...field} className={classes} />
+          ) : (
+            <Input id={name} type={type} {...field} className={classes} placeholder={placeholder} />
+          )
+        }
+        <Text as='p' className='register__p-error'>{isFieldError ? errors[name] : ''}</Text>
+      </Box>
     </Fragment>
   )
 }

@@ -28,9 +28,9 @@ export const Profile = () => {
     <motion.div {...configAnimationPage}>
       <Box w='1057px'>
         {
-          isLoading ? (<LoadingSvg className="profile-loading" />) : isError ? (
-            <Text as='h2'>Error, try again later</Text>
-          ) : showRegistration ? (<Registration />) : (<AvailableProfile data={data} />)
+          showRegistration ? (<Registration />) : isLoading ? 
+          (<LoadingSvg className="profile-loading" />) : isError ? 
+          (<Text as='h2'>Error, try again later</Text>) : (<AvailableProfile data={data} />)
         }
       </Box>
     </motion.div>

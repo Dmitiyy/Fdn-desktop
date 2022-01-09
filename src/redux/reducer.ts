@@ -11,6 +11,7 @@ interface IState {
   certainConference: any;
   openModal: Boolean;
   yourConfs: Array<any>;
+  createdConfs: Array<any>;
 };
 
 const initialState = {
@@ -18,7 +19,8 @@ const initialState = {
   activeNavBtn: 0,
   certainConference: {},
   openModal: false,
-  yourConfs: []
+  yourConfs: [],
+  createdConfs: []
 } as IState;
 
 const userSlice = createSlice({

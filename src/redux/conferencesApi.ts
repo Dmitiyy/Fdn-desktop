@@ -12,7 +12,7 @@ const commonConfig = {
   headers: {
     'Security-password': process.env.REACT_APP_SECURITY_PASSWORD
   },
-}
+};
 
 export const conferencesApi = createApi({
   reducerPath: 'conferencesApi',
@@ -31,11 +31,19 @@ export const conferencesApi = createApi({
         ...commonConfig,
         body: data
       })
+    }),
+    createOneConference: builder.mutation({
+      query: (data) => ({
+        url: 'conferences/create',
+        ...commonConfig,
+        body: data
+      })
     })
   })
-})
+});
 
 export const { 
   useGetAllConferencesMutation,
-  useGetOneConferenceMutation
+  useGetOneConferenceMutation,
+  useCreateOneConferenceMutation
 } = conferencesApi;

@@ -1,12 +1,15 @@
-import { Box, Text, Flex, Textarea, Input, Button } from "@chakra-ui/react";
+import { Box, Text, Flex, Input, Button } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
-import { Formik, Form, } from 'formik';
-import { AppDispatch } from "../redux";
+import * as Yup from 'yup';
+import { Formik, Form } from 'formik';
+import { AppDispatch, useAppSelector } from "../redux";
 import {configAnimationPage} from '../App'; 
 import { setDataDefault } from "../redux/reducer";
 import { CustomInput } from "./SignUp";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useCreateOneConferenceMutation } from "../redux/conferencesApi";
+import { IUserData } from "../redux/userApi";
 
 interface IFormik {
   name: string;
@@ -15,10 +18,12 @@ interface IFormik {
   day: string;
   month: string;
   year: string;
+  description: string;
 }
 
-export const CreateConf = () => {
+export const CreateConf = ({user}: {user: IUserData}) => {
   const dispatch = useDispatch<AppDispatch>();
+  const createdConferences = useAppSelector(state => state.user.createdConfs);
   const initialState = {
     name: '',
     link: '',
@@ -26,10 +31,39 @@ export const CreateConf = () => {
     day: '',
     month: '',
     year: '',
+    description: ''
   } as IFormik;
   const [fileName, setFileName] = useState<string>('Select');
-  const [descr, setDescr] = useState<string>('');
-  const [file, setFile] = useState({});
+  const [file, setFile] = useState<string>('');
+  const [createConfTrigger, {data, isLoading, isError}] = useCreateOneConferenceMutation();
+  const [fileError, setFileError] = useState<Boolean>(false);
+  const [clearForm, setClearForm] = useState<Boolean>(false);
+  const fileInput: any = useRef(null);
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setDataDefault({ini: 'createdConfs', data: [...createdConferences, data]}));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!isLoading && !isError && data) {
+      setClearForm(true);
+      fileInput.current.value = null;
+    }
+    else {setClearForm(false)};
+  }, [isLoading, isError, data]);
+
+  const validationSchema = Yup.object({
+    name: Yup.string().required('Conference must have a name'),
+    link: Yup.string().required('Conference must have a link'),
+    time: Yup.string().required('Conference must have a time'),
+    day: Yup.string().required('Establish a day'),
+    month: Yup.string().required('Establish a month'),
+    year: Yup.string().required('Establish a year'),
+    description: Yup.string().required('Conference must have a description')
+    .min(10, 'Your description is too short')
+  });
 
   const closeModal = (event: any): void => {
     if (event.target.className.split(' ').includes('create__bg')) {
@@ -39,23 +73,48 @@ export const CreateConf = () => {
 
   const handleFile = (event: any): void => {
     const file = event.target.files['0'];
-    if (file.name.length > 20) {
-      setFileName(file.name.slice(0, 20) + '...');
-      setFile(file);
-    } else {setFileName(file.name); setFile(file)};
+    
+    if (file) {
+      if (file.name.length > 20) {
+        setFileName(file.name.slice(0, 20) + '...');
+      } else {setFileName(file.name)};
+
+      const reader: any = new FileReader();
+      reader.addEventListener("load", () => {
+        setFile(reader.result);
+      }, false);
+
+      setFileError(false);
+      reader.readAsDataURL(file);
+    }
   }
 
   return (
     <motion.div {...configAnimationPage}>
       <Box className="create__bg" onClick={(e) => {closeModal(e)}}>
-        <Box className="create__modal">
+        <Box className="create__modal" overflowY='auto'>
           <Text as='h3'>Create a new conference</Text>
 
-          <Formik initialValues={initialState} onSubmit={(values) => {
-            console.log(values);
-            console.log(descr);
-            console.log(file);
-          }}>
+          <Formik initialValues={initialState} onSubmit={(values, {resetForm}) => {
+            const result = {
+              name: values.name,
+              time: `${values.year}-${values.month}-${values.day} ${values.time}`,
+              photo: file,
+              description: values.description,
+              conferenceLink: values.link,
+              author: {
+                name: user.name,
+                photo: user.photo,
+                description: user.job,
+                timezon: Intl.DateTimeFormat().resolvedOptions().timeZone
+              },
+              userId: user._id
+            };
+            createConfTrigger(result);
+            if (!isLoading && !isError && data) {
+              resetForm();
+            }
+          }} validationSchema={validationSchema}>
             {
               ({errors, touched}) => (
                 <Form>
@@ -65,8 +124,9 @@ export const CreateConf = () => {
                   </Box>
 
                   <Box className="create__modal-item">
-                    <Text as='label' htmlFor="descr">Description</Text>
-                    <Textarea id='descr' onChange={(e) => {setDescr(e.target.value)}} />
+                    <Text as='label' htmlFor="description">Description</Text>
+                    <CustomInput name='description' type='text' 
+                    errors={errors} touched={touched} textarea={true} />
                   </Box>
 
                   <Box className="create__modal-item">
@@ -81,7 +141,7 @@ export const CreateConf = () => {
 
                   <Box className="create__modal-item">
                     <Text as='label' htmlFor="day">Date (like 01.02.2022)</Text>
-                    <Flex justifyContent='space-between'>
+                    <Flex justifyContent='space-between' className="create__modal-small">
                       <CustomInput name='day' type='text' 
                       errors={errors} touched={touched} placeholder="Day" />
                       <CustomInput name='month' type='text' 
@@ -94,13 +154,27 @@ export const CreateConf = () => {
                   <Box className="create__modal-item">
                     <Text as='label' htmlFor="photo">Photo</Text>
                     <Flex justifyContent='space-between'>
-                      <Button id='photo' className="create__modal-select">
+                      <Button id='photo' className="create__modal-select"
+                      border={fileError ? '2px solid rgb(218, 126, 126)' : ''}>
                         <Text as='h3'>{fileName}</Text>
                         <Input type='file' id='photo' className="create__modal-input" 
-                        onChange={(e) => {handleFile(e)}} />
+                        onChange={(e) => {handleFile(e)}} ref={fileInput} />
                       </Button>  
-                      <Button className='create-btn' type='submit'>Create</Button>
+                      <Button className='create-btn' type='submit' onClick={() => {
+                        if (file.length === 0) {setFileError(true)}
+                        else {setFileError(false)};
+                      }} disabled={isLoading}>{isLoading ? 'Loading' : 'Create'}</Button>
                     </Flex>
+                    {
+                      fileError ? (
+                        <Text as='p' className='register__p-error'>Establish a photo</Text>
+                      ) : null
+                    }
+                    {
+                      isError ? (
+                        <Text as='p' className='register__p-error'>Error, try again</Text>
+                      ) : null 
+                    }
                   </Box>
                 </Form>
               )
@@ -110,4 +184,4 @@ export const CreateConf = () => {
       </Box>
     </motion.div>
   )
-} 
+}

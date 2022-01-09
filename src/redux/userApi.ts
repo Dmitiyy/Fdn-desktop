@@ -9,6 +9,7 @@ export interface IUserData {
   name?: string
   updatedAt?: string
   _id?: string
+  photo?: string
 }
 
 interface ILikeData {

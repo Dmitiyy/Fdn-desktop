@@ -13,10 +13,18 @@
     align-items: center
   &__modal
     width: 536px
+    height: 820px
     box-shadow: 0px 0px 11px rgba(0, 0, 0, 0.3)
     background-color: #fff
     border-radius: 45px
     padding: 26px
+    &::-webkit-scrollbar
+      width: 0px !important
+    &::-webkit-scrollbar-track
+      border-radius: 10px
+    &::-webkit-scrollbar-thumb
+      background: #091d362a
+      border-radius: 12px
     h3
       text-align: center
       color: #000
@@ -38,7 +46,7 @@
           box-shadow: 0 0 0 1px #091D36
       textarea
         max-height: 200px
-      div
+      .create__modal-small
         input
           width: 154px
     &-select

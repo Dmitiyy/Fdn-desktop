@@ -7,7 +7,7 @@ export class User {
   @Prop({ required: true })
   name: string
 
-  @Prop()
+  @Prop({ default: '' })
   photo: string
 
   @Prop({ default: 'Please establish your job' })
