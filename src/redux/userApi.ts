@@ -40,8 +40,22 @@ export const userApi = createApi({
         },
         body: data
       })
+    }),
+    removeYour: builder.mutation({
+      query: (data) => ({
+        url: 'users/removeFromFavourite',
+        method: 'PATCH',
+        headers: {
+          'Security-password': process.env.REACT_APP_SECURITY_PASSWORD
+        },
+        body: data
+      })
     })
   })
 })
 
-export const {useGetProfileDataQuery, useLikeMutation} = userApi;
+export const {
+  useGetProfileDataQuery, 
+  useLikeMutation,
+  useRemoveYourMutation
+} = userApi;

@@ -6,6 +6,7 @@ import BinIcon from '../images/bin.svg';
 import LogOutIcon from '../images/logout.svg';
 import SendIcon from '../images/send.svg';
 import { IUserData, useLikeMutation } from "../redux/userApi";
+import { useRemoveYourMutation } from "../redux/userApi";
 import { AppDispatch, useAppSelector } from "../redux";
 import { useNavigate } from 'react-router-dom';
 import { renderDate, transformTime } from "./Card";
@@ -20,9 +21,8 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
   const [likeTrigger] = useLikeMutation();
   const [likedConferences, setLikedConferences] = useState<Array<any>>([]);
   const createdConferences = useAppSelector(state => state.user.createdConfs);
-
-  // const [createdConferences, setCreatedConferences] = useState<Array<any>>([]);
   const openCreateConf = useAppSelector(state => state.user.openModal);
+  const [removeYourTrigger] = useRemoveYourMutation();
 
   useEffect(() => {setLikedConferences(data.likedConferences)}, [data.likedConferences]);
   useEffect(() => {
@@ -54,6 +54,13 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
     dispatch(setDataDefault({data: true, ini: 'openModal'}));
   }
 
+  const removeFromYour = (id: string): void => {
+    const result = {conferenceId: id, userId: data._id};
+    removeYourTrigger(result);
+    const filteredConferences = data.conferences.filter(item => item._id !== id);
+    dispatch(setDataDefault({ini: 'createdConfs', data: filteredConferences}));
+  }
+  
   return (
     <Fragment>
       <Box d='flex'>
@@ -92,7 +99,9 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
                             <Box as='button' onClick={() => {openConference(item)}}>
                               <Text as='p'>View conf</Text>
                             </Box>
-                            <Box as='button'><Image src={BinIcon} alt='bin' fill='#fff' /></Box>
+                            <Box as='button' onClick={() => {removeFromYour(item._id)}}>
+                              <Image src={BinIcon} alt='bin' fill='#fff' />
+                            </Box>
                           </Box>
                         </Box>
                       )

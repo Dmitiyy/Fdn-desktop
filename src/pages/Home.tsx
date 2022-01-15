@@ -80,7 +80,7 @@ export const Home = () => {
               [...generatedData].map((item: IConference) => {
                 return (
                   <Fragment key={item._id}>
-                    <Card id={item._id} name={item.name} 
+                    <Card id={item._id} name={item.name}
                     photo={item.photo} time={item.time} profileId={profileId} />
                   </Fragment>
                 )

@@ -39,15 +39,19 @@ export const Card = (cardData: ICard) => {
   const navigate = useNavigate();
   const [like, setLike] = useState<Boolean>(false);
   const [likeTrigger] = useLikeMutation();
+  const [your, setYour] = useState<Boolean>(false);
+
+  const checkIsExist = (data: string, func: Function): void => {
+    const isExist = cardData.profileId[data].some(
+      (item: any) => item._id === cardData.id
+    );
+    if (isExist) {func(true)}
+    else {func(false)};
+  }
 
   useEffect(() => {
-    if (cardData.profileId.likedConferences) {
-      const isExist = cardData.profileId.likedConferences.some(
-        (item: any) => item._id === cardData.id
-      );
-      if (isExist) {setLike(true)}
-      else {setLike(false)};
-    }
+    if (cardData.profileId.likedConferences) {checkIsExist('likedConferences', setLike)};
+    if (cardData.profileId.conferences) {checkIsExist('conferences', setYour)};
   }, [cardData.profileId]);
 
   useEffect(() => {
@@ -87,14 +91,18 @@ export const Card = (cardData: ICard) => {
       <Text as='p' fontSize='21px' fontWeight='500'>{cardData.name}</Text>
       <Flex w='180px' justifyContent='space-between'>
         <Box as='button' fontSize='19px' fontWeight='700'
-        w='120px' h='50px' bg='#C2D2E9' borderRadius='26px' onClick={() => {
+        w={your ? '100%' : '120px'} h='50px' bg='#C2D2E9' borderRadius='26px' onClick={() => {
           openConference(cardData.id);
         }}>Open</Box>
-        <Flex as='button' className="home-card-btn" onClick={handleLike}>
-          <Box w='28px' h='28px' mt='2px' pos='relative'>
-            <Image src={!like ? Heart : HeartSelected}></Image>
-          </Box>
-        </Flex>
+        {
+          !your ? (
+            <Flex as='button' className="home-card-btn" onClick={handleLike}>
+              <Box w='28px' h='28px' mt='2px' pos='relative'>
+                <Image src={!like ? Heart : HeartSelected}></Image>
+              </Box>
+            </Flex>
+          ) : null
+        }
       </Flex>
     </Flex>
   )

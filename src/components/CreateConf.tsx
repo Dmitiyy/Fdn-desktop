@@ -7,7 +7,7 @@ import { AppDispatch, useAppSelector } from "../redux";
 import {configAnimationPage} from '../App'; 
 import { setDataDefault } from "../redux/reducer";
 import { CustomInput } from "./SignUp";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useCreateOneConferenceMutation } from "../redux/conferencesApi";
 import { IUserData } from "../redux/userApi";
 
@@ -37,22 +37,13 @@ export const CreateConf = ({user}: {user: IUserData}) => {
   const [file, setFile] = useState<string>('');
   const [createConfTrigger, {data, isLoading, isError}] = useCreateOneConferenceMutation();
   const [fileError, setFileError] = useState<Boolean>(false);
-  const [clearForm, setClearForm] = useState<Boolean>(false);
-  const fileInput: any = useRef(null);
+  const fileInputRef: any = useRef();
 
   useEffect(() => {
     if (data) {
       dispatch(setDataDefault({ini: 'createdConfs', data: [...createdConferences, data]}));
     }
   }, [data]);
-
-  useEffect(() => {
-    if (!isLoading && !isError && data) {
-      setClearForm(true);
-      fileInput.current.value = null;
-    }
-    else {setClearForm(false)};
-  }, [isLoading, isError, data]);
 
   const validationSchema = Yup.object({
     name: Yup.string().required('Conference must have a name'),
@@ -95,24 +86,28 @@ export const CreateConf = ({user}: {user: IUserData}) => {
         <Box className="create__modal" overflowY='auto'>
           <Text as='h3'>Create a new conference</Text>
 
-          <Formik initialValues={initialState} onSubmit={(values, {resetForm}) => {
-            const result = {
-              name: values.name,
-              time: `${values.year}-${values.month}-${values.day} ${values.time}`,
-              photo: file,
-              description: values.description,
-              conferenceLink: values.link,
-              author: {
-                name: user.name,
-                photo: user.photo,
-                description: user.job,
-                timezon: Intl.DateTimeFormat().resolvedOptions().timeZone
-              },
-              userId: user._id
-            };
-            createConfTrigger(result);
-            if (!isLoading && !isError && data) {
+          <Formik initialValues={initialState} onSubmit={async (values, {resetForm}) => {
+            if (file.length !== 0) {
+              const result = {
+                name: values.name,
+                time: `${values.year}-${values.month}-${values.day} ${values.time}`,
+                photo: file,
+                description: values.description,
+                conferenceLink: values.link,
+                author: {
+                  name: user.name,
+                  photo: user.photo,
+                  description: user.job,
+                  timezon: Intl.DateTimeFormat().resolvedOptions().timeZone
+                },
+                userId: user._id
+              };
+              await createConfTrigger(result);
               resetForm();
+              fileInputRef.current.value = '';
+              setFile('');
+              setFileName('Select');
+              setFileError(false);
             }
           }} validationSchema={validationSchema}>
             {
@@ -158,7 +153,7 @@ export const CreateConf = ({user}: {user: IUserData}) => {
                       border={fileError ? '2px solid rgb(218, 126, 126)' : ''}>
                         <Text as='h3'>{fileName}</Text>
                         <Input type='file' id='photo' className="create__modal-input" 
-                        onChange={(e) => {handleFile(e)}} ref={fileInput} />
+                        onChange={(e) => {handleFile(e)}} ref={fileInputRef} />
                       </Button>  
                       <Button className='create-btn' type='submit' onClick={() => {
                         if (file.length === 0) {setFileError(true)}

@@ -55,7 +55,6 @@ export class ConferencesService {
 
   async getOne(data: GetConferenceDto): Promise<Conference> {
     const conference = await this.conferenceModel.findById(data.id);
-    // return this.transformDataWithCertainTime([conference])[0];
     return conference;
   }
 }
