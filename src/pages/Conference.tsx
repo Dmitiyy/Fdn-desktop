@@ -1,15 +1,43 @@
-import { Box, Text, Flex } from "@chakra-ui/react";
+import { Box, Text, Flex, Button } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { configAnimationPage } from "../App";
+import { useProfile } from "../hooks/useProfile";
 import { useAppSelector } from "../redux";
+import { useJoinConferenceMutation } from '../redux/conferencesApi';
 
 export const Conference = () => {
   const data = useAppSelector(state => state.user.certainConference);
+  const {profileData} = useProfile();
+  const [joined, setJoined] = useState<Boolean>(false);
+  const [joinTrigger, {data: joinedData, isLoading, isError}] = useJoinConferenceMutation();
+  const [clickBtn, setClickBtn] = useState<Boolean>(false);
 
   useEffect(() => {
     window.scrollTo({top: 0, behavior: 'smooth'});
   }, []);
+
+  useEffect(() => {
+    if (joinedData && !isLoading && !isError) {setJoined(clickBtn)};
+  }, [joinedData]);
+
+  useEffect(() => {
+    if (profileData) {
+      const isExist = profileData.conferences.some((item: any) => {
+        return item._id.toString() === data._id;
+      });
+      setJoined(isExist);
+    }
+  }, [profileData]);
+
+  const handleJoin = (): void => {
+    const result = {
+      conferenceId: data._id,
+      userId: profileData._id,
+      delete: joined
+    };
+    joinTrigger(result);
+  }
   
   return (
     <motion.div {...configAnimationPage}>
@@ -50,7 +78,26 @@ export const Conference = () => {
             <Text as='p' className='conf__info-participants' mt='19px'>
               Participants: <Text as='span'>{data.participants}</Text>
             </Text>
-            <Box as='button' className='conf__info-btn' mt='23px' w='100%'>Join us</Box>
+            {
+              !joined ? (
+                <Button as='button' className='conf__info-btn' mt='23px' w='100%' disabled={isLoading}
+                onClick={() => {
+                  setClickBtn(true);
+                  handleJoin();
+                }}>Join us</Button>
+              ) : (
+                 <Fragment>
+                  <Button as='button' disabled={isLoading} className='conf__info-btn' 
+                  mt='23px' w='100%' onClick={() => {
+                    setClickBtn(false);
+                    handleJoin();
+                  }}>
+                    Leave
+                  </Button>
+                  <Text as='p' className='conf__info-descr' mt='21px'>{data.conferenceLink}</Text>
+                </Fragment>
+              )
+            }
           </Box>
         </Flex>
       </Box>

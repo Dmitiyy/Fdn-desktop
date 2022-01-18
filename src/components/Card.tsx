@@ -15,6 +15,7 @@ interface ICard {
   time: string,
   name: string,
   profileId: any, 
+  link: string,
 }
 
 export const transformTime = (date: Date) => {

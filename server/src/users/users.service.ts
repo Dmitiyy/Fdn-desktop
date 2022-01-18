@@ -53,7 +53,15 @@ export class UsersService {
   async addToYour(data: YourUserDto): Promise<User> {
     const user = await this.userModel.findById(data.userId);
     if (user && data.conference) {
-      await user.updateOne({ conferences: [...user.conferences, data.conference] });
+      if (!data.delete) {
+        await user.updateOne({ conferences: [...user.conferences, data.conference] });
+      } else {
+        const filteredConfs = user.conferences.filter((item: any) => {
+          const conf: any = data.conference;
+          return item._id.toString() !== conf._id.toString();
+        });
+        await user.updateOne({ conferences: filteredConfs });
+      }
     }
     return user;
   }

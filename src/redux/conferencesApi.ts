@@ -38,6 +38,16 @@ export const conferencesApi = createApi({
         ...commonConfig,
         body: data
       })
+    }),
+    joinConference: builder.mutation({
+      query: (data) => ({
+        url: 'conferences/join',
+        headers: {
+          'Security-password': process.env.REACT_APP_SECURITY_PASSWORD
+        },
+        method: 'PATCH',
+        body: data
+      })
     })
   })
 });
@@ -45,5 +55,6 @@ export const conferencesApi = createApi({
 export const { 
   useGetAllConferencesMutation,
   useGetOneConferenceMutation,
-  useCreateOneConferenceMutation
+  useCreateOneConferenceMutation,
+  useJoinConferenceMutation
 } = conferencesApi;

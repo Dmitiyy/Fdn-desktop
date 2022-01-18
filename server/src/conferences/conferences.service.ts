@@ -8,6 +8,7 @@ import { CreatePaginationDto } from './dto/create-pagination.dto';
 import { GetConferenceDto } from './dto/get-conference.dto';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 import { UsersService } from 'src/users/users.service';
+import { JoinConference } from './dto/join-conference.dto';
 
 @Injectable()
 export class ConferencesService {
@@ -32,7 +33,7 @@ export class ConferencesService {
       ...data, createdAt: new Date(), updatedAt: new Date(), photo: uploadedImage.url
     });
     await conference.save();
-    await this.usersService.addToYour({ userId: data.userId, conference });
+    await this.usersService.addToYour({ userId: data.userId, conference, delete: false });
     return conference;
   }
 
@@ -55,6 +56,12 @@ export class ConferencesService {
 
   async getOne(data: GetConferenceDto): Promise<Conference> {
     const conference = await this.conferenceModel.findById(data.id);
+    return conference;
+  }
+
+  async joinToConference(data: JoinConference): Promise<Conference> {
+    const conference = await this.conferenceModel.findById(data.conferenceId);
+    await this.usersService.addToYour({ userId: data.userId, conference, delete: data.delete });
     return conference;
   }
 }
