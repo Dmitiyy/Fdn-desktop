@@ -12,6 +12,7 @@ export const Conference = () => {
   const [joined, setJoined] = useState<Boolean>(false);
   const [joinTrigger, {data: joinedData, isLoading, isError}] = useJoinConferenceMutation();
   const [clickBtn, setClickBtn] = useState<Boolean>(false);
+  const [parts, setParts] = useState<number>(+data.participants);
 
   useEffect(() => {
     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -76,13 +77,14 @@ export const Conference = () => {
             </Flex>     
             <Text as='p' className='conf__info-descr' mt='21px'>{data.description}</Text>
             <Text as='p' className='conf__info-participants' mt='19px'>
-              Participants: <Text as='span'>{data.participants}</Text>
+              Participants: <Text as='span'>{parts}</Text>
             </Text>
             {
               !joined ? (
                 <Button as='button' className='conf__info-btn' mt='23px' w='100%' disabled={isLoading}
                 onClick={() => {
                   setClickBtn(true);
+                  setParts(prev => prev + 1);
                   handleJoin();
                 }}>Join us</Button>
               ) : (
@@ -90,6 +92,7 @@ export const Conference = () => {
                   <Button as='button' disabled={isLoading} className='conf__info-btn' 
                   mt='23px' w='100%' onClick={() => {
                     setClickBtn(false);
+                    setParts(prev => prev - 1);
                     handleJoin();
                   }}>
                     Leave

@@ -61,6 +61,14 @@ export class ConferencesService {
 
   async joinToConference(data: JoinConference): Promise<Conference> {
     const conference = await this.conferenceModel.findById(data.conferenceId);
+    let participantsPlus: number;
+    if (!data.delete) {
+      participantsPlus = Number(conference.participants) + 1;
+    } else {
+      participantsPlus = Number(conference.participants) - 1;
+    }
+    await conference.updateOne({ participants: participantsPlus.toString() });
+    conference.participants = participantsPlus.toString();
     await this.usersService.addToYour({ userId: data.userId, conference, delete: data.delete });
     return conference;
   }
