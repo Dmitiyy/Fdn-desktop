@@ -51,7 +51,7 @@ export const Home = () => {
 
   return (
     <motion.div {...configAnimationPage}>
-      <Box w='1057px'>
+      <Box w='1057px' minH='100vh'>
         <Box w='100%' h='290px' bg='#3A4E7A' borderRadius='12px'>
           <Flex justifyContent='space-evenly' alignItems='center' h='100%'>
             <Box w='591px'>

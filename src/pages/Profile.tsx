@@ -26,7 +26,7 @@ export const Profile = () => {
 
   return (
     <motion.div {...configAnimationPage}>
-      <Box w='1057px'>
+      <Box w='1057px' minH='100vh'>
         {
           showRegistration ? (<Registration />) : isLoading ? 
           (<LoadingSvg className="profile-loading" />) : isError ? 

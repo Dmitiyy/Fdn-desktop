@@ -12,12 +12,12 @@ import Logo from './images/logo.png';
 import HomeIcon from './images/home.svg';
 import ProfileIcon from './images/profile.svg';
 import SearchIcon from './images/search.svg';
-import CloseIcon from './images/close.svg';
+// import CloseIcon from './images/close.svg';
 import { Home } from './pages/Home';
 import { Profile } from './pages/Profile';
 import { Conference } from './pages/Conference';
-const { ipcRenderer } = window.require('electron');
-require('dotenv').config();
+// const { ipcRenderer } = window.require('electron');
+// require('dotenv').config();
 
 export const configAnimationPage = {
   initial: {opacity: 0},
@@ -33,7 +33,7 @@ function App() {
     <Container maxW='1180px' mt='30px' mb='30px'>
       <Flex>
         <Box d='flex' flexDirection='column' alignItems='center'
-        height='100%'
+        // height='100%'
         position='sticky' top='30px'>
           <Image src={Logo} alt='logo' />
           {
@@ -53,14 +53,14 @@ function App() {
               )
             })
           }
-          <Flex flexDirection='column' justifyContent='flex-end' 
+          {/* <Flex flexDirection='column' justifyContent='flex-end' 
           h='calc(100vh - ((65px + 26px) * 3) - (60px * 2))' minH='90px'>
             <Box mt='26px'>
               <BtnNav img={CloseIcon} bg={'#D39696'} click={() => {
                 ipcRenderer.send('btn-exit');
               }} />
             </Box>
-          </Flex>
+          </Flex> */}
         </Box>
         <Box ml='26px'>
           <AnimatePresence>
