@@ -1,10 +1,12 @@
 import { Box, Text, Flex, Button } from "@chakra-ui/react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { configAnimationPage } from "../App";
 import { useProfile } from "../hooks/useProfile";
 import { useAppSelector } from "../redux";
 import { useJoinConferenceMutation } from '../redux/conferencesApi';
+import { useRemoveYourMutation } from "../redux/userApi";
 
 export const Conference = () => {
   const data = useAppSelector(state => state.user.certainConference);
@@ -13,6 +15,9 @@ export const Conference = () => {
   const [joinTrigger, {data: joinedData, isLoading, isError}] = useJoinConferenceMutation();
   const [clickBtn, setClickBtn] = useState<Boolean>(false);
   const [parts, setParts] = useState<number>(+data.participants);
+  const [yourConf, setYourConf] = useState<Boolean>(false);
+  const [removeConference, {data: removedData, isLoading: removedLoading}] = useRemoveYourMutation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     window.scrollTo({top: 0, behavior: 'smooth'});
@@ -22,12 +27,15 @@ export const Conference = () => {
     if (joinedData && !isLoading && !isError) {setJoined(clickBtn)};
   }, [joinedData]);
 
+  useEffect(() => {if (removedData && !removedLoading) {navigate('/')}}, [removedData]);
+
   useEffect(() => {
     if (profileData) {
       const isExist = profileData.conferences.some((item: any) => {
         return item._id.toString() === data._id;
       });
       setJoined(isExist);
+      if (data.author.email === profileData.email) {setYourConf(true)};
     }
   }, [profileData]);
 
@@ -38,6 +46,10 @@ export const Conference = () => {
       delete: joined
     };
     joinTrigger(result);
+  }
+
+  const handleRemoveConference = (): void => {
+    removeConference({userId: profileData._id, conferenceId: data._id});
   }
   
   return (
@@ -80,7 +92,10 @@ export const Conference = () => {
               Participants: <Text as='span'>{parts}</Text>
             </Text>
             {
-              !joined ? (
+              yourConf ? (
+                <Button as='button' className='conf__info-btn' mt='23px' w='100%' 
+                disabled={removedLoading} onClick={handleRemoveConference}>Delete conference</Button>
+              ) : !joined ? (
                 <Button as='button' className='conf__info-btn' mt='23px' w='100%' disabled={isLoading}
                 onClick={() => {
                   setClickBtn(true);

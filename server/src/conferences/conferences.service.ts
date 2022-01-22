@@ -30,7 +30,7 @@ export class ConferencesService {
   async createOne(data: CreateConferenceDto): Promise<Conference> {
     const uploadedImage = await this.cloudinaryService.uploadImage(data.photo);
     const conference = new this.conferenceModel({
-      ...data, createdAt: new Date(), updatedAt: new Date(), photo: uploadedImage.url
+      ...data, createdAt: new Date(), updatedAt: new Date(), photo: uploadedImage.url, participants: '1'
     });
     await conference.save();
     await this.usersService.addToYour({ userId: data.userId, conference, delete: false });

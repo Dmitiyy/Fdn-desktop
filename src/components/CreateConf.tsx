@@ -98,7 +98,8 @@ export const CreateConf = ({user}: {user: IUserData}) => {
                   name: user.name,
                   photo: user.photo,
                   description: user.job,
-                  timezon: Intl.DateTimeFormat().resolvedOptions().timeZone
+                  timezon: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                  email: user.email
                 },
                 userId: user._id
               };

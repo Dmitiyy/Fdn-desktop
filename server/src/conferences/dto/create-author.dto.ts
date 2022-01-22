@@ -3,4 +3,5 @@ export class CreateAuthorDto {
   readonly photo: string
   readonly description: string
   readonly timezon: string
+  readonly email: string
 }

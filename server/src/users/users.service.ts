@@ -68,13 +68,23 @@ export class UsersService {
 
   async removeFromYour(data: RemoveYourDto): Promise<User> {
     const conferences = (await this.userModel.findById(data.userId)).conferences;
-    const filteredConfs = conferences.filter((item: any) => {
-      return item._id.toString() !== data.conferenceId;
-    });
-    const changedUser = await this.userModel.findByIdAndUpdate(
-      data.userId, { conferences: filteredConfs }
-    );
-    await this.conferenceModel.findByIdAndDelete(data.conferenceId);
+    const findConference = (isEqual: Boolean): Conference[] => {
+      return conferences.filter((item: any) => {
+        const itemId: string = item._id.toString();
+        if (isEqual) return itemId === data.conferenceId
+        else return itemId !== data.conferenceId
+      });
+    };
+    const filteredConfs = findConference(false);
+    const user = await this.userModel.findById(data.userId);
+    if (user.email === findConference(true)[0].author.email) {
+      await this.conferenceModel.findByIdAndDelete(data.conferenceId);
+    } else {
+      await this.conferenceModel.findByIdAndUpdate(
+        data.conferenceId, {participants: (+(findConference(true)[0].participants) - 1).toString()}
+      );
+    }
+    const changedUser = await user.updateOne({ conferences: filteredConfs });
     return changedUser;
   }
 }
