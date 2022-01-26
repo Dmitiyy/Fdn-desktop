@@ -8,6 +8,8 @@ import { AppMiddleware } from './app.middleware';
 import { ConferencesModule } from './conferences/conferences.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { v2 as cloudinary } from 'cloudinary';
+import { AppGateway } from './app.gateway';
+import { MessagesModule } from './messages/messages.module';
 
 dotenv.config({ path: '.env' });
 
@@ -24,8 +26,10 @@ cloudinary.config({
     AuthModule,
     ConferencesModule,
     CloudinaryModule,
+    MessagesModule,
   ],
-  controllers: [AppController]
+  controllers: [AppController],
+  providers: [AppGateway]
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

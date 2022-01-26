@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Document } from "mongoose";
+import { Message } from "src/messages/schemas/message.schema";
 import { Conference } from "../../conferences/schemas/conference.schema";
 
 @Schema()
@@ -30,6 +31,9 @@ export class User {
 
   @Prop({ default: Date.now() })
   updatedAt: Date
+
+  @Prop({ default: [] })
+  supportMessages: Array<Message>
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

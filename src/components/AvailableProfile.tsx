@@ -1,5 +1,6 @@
 import { Box, Text, Flex, Image, Grid, Textarea } from "@chakra-ui/react";
 import { AnimatePresence } from 'framer-motion';
+import * as io from "socket.io-client";
 import ProfileMainPhoto from '../images/profile_main.png';
 import { useDispatch } from "react-redux";
 import BinIcon from '../images/bin.svg';
@@ -15,6 +16,8 @@ import { Fragment, useEffect, useState } from "react";
 import { CreateConf } from "./CreateConf";
 import {ReactComponent as NoAvatar} from '../images/no_avatar.svg';
 
+const socket = io.connect('http://localhost:3001/');
+
 export const AvailableProfile = ({data}: {data: IUserData}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
@@ -23,11 +26,21 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
   const createdConferences = useAppSelector(state => state.user.createdConfs);
   const openCreateConf = useAppSelector(state => state.user.openModal);
   const [removeYourTrigger] = useRemoveYourMutation();
-
+  
   useEffect(() => {setLikedConferences(data.likedConferences)}, [data.likedConferences]);
   useEffect(() => {
     dispatch(setDataDefault({ini: 'createdConfs', data: data.conferences}));
   }, [data.conferences]);
+  
+  useEffect(() => {
+    socket.on('events', (data: any) => {
+      console.log(data);
+    });
+  }, []);
+
+  const sendMessage = (): void => {
+    socket.emit('events', {authorId: data._id?.toString(), text: 'Hello, chat'});
+  }
 
   const openConference = (conference: any): void => {
     const cardData = {
@@ -193,7 +206,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
               </Box>
               <Box className="profile__chat-text">
                 <Textarea placeholder='Write your message' />
-                <Image src={SendIcon} alt='send' />
+                <Image src={SendIcon} alt='send' onClick={sendMessage} />
               </Box>
             </Box>
           </Box>

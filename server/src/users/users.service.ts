@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Conference, ConferenceDocument } from 'src/conferences/schemas/conference.schema';
+import { Message } from 'src/messages/schemas/message.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FavouriteUserConfDto } from './dto/favourite-user.dto';
 import { RemoveYourDto } from './dto/remove-your.dto';
@@ -17,6 +18,12 @@ export class UsersService {
 
   async findOneUser(email: string): Promise<User | undefined> {
     const user = await this.userModel.findOne({ email });
+    return user;
+  }
+
+  async addMessageUser(id: string, message: Message): Promise<User> {
+    const user = await this.userModel.findById(id);
+    await user.updateOne({ supportMessages: [...user.supportMessages, message] });
     return user;
   }
 
@@ -81,7 +88,7 @@ export class UsersService {
       await this.conferenceModel.findByIdAndDelete(data.conferenceId);
     } else {
       await this.conferenceModel.findByIdAndUpdate(
-        data.conferenceId, {participants: (+(findConference(true)[0].participants) - 1).toString()}
+        data.conferenceId, { participants: (+(findConference(true)[0].participants) - 1).toString() }
       );
     }
     const changedUser = await user.updateOne({ conferences: filteredConfs });
