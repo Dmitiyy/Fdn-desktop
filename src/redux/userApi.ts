@@ -9,7 +9,8 @@ export interface IUserData {
   name?: string
   updatedAt?: string
   _id?: string
-  photo?: string
+  photo?: string,
+  supportMessages: Array<any>
 }
 
 interface ILikeData {

@@ -12,7 +12,7 @@ import { AppDispatch, useAppSelector } from "../redux";
 import { useNavigate } from 'react-router-dom';
 import { renderDate, transformTime } from "./Card";
 import { setDataDefault } from "../redux/reducer";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { CreateConf } from "./CreateConf";
 import {ReactComponent as NoAvatar} from '../images/no_avatar.svg';
 
@@ -26,21 +26,28 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
   const createdConferences = useAppSelector(state => state.user.createdConfs);
   const openCreateConf = useAppSelector(state => state.user.openModal);
   const [removeYourTrigger] = useRemoveYourMutation();
+  // const [suppMes, setSuppMes] = useState(data.supportMessages);
+  // const [messageLoading, setMessageLoading] = useState<Boolean>(false);
+  // const [textMessage, setTextMessage] = useState<string>('');
+  // const messageList: any = useRef();
   
   useEffect(() => {setLikedConferences(data.likedConferences)}, [data.likedConferences]);
   useEffect(() => {
     dispatch(setDataDefault({ini: 'createdConfs', data: data.conferences}));
   }, [data.conferences]);
   
-  useEffect(() => {
-    socket.on('events', (data: any) => {
-      console.log(data);
-    });
-  }, []);
+  // useEffect(() => {
+  //   socket.on('events', (data: any) => {
+  //     setSuppMes(prev => [...prev, data]);
+  //     setMessageLoading(false);
+  //     messageList.current.scrollIntoView({ behavior: 'smooth' });
+  //   });
+  // }, []);
 
-  const sendMessage = (): void => {
-    socket.emit('events', {authorId: data._id?.toString(), text: 'Hello, chat'});
-  }
+  // const sendMessage = (): void => {
+  //   setMessageLoading(true);
+  //   socket.emit('events', {authorId: data._id?.toString(), text: textMessage});
+  // }
 
   const openConference = (conference: any): void => {
     const cardData = {
@@ -185,30 +192,31 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
           </Flex>
           <Box className="profile_support">
             <Text as='h3'>Support service</Text>
-            <Box w='100%' h='100%' className="profile__chat">
+            <SupportChat data={data} />
+            {/* <Box w='100%' h='100%' className="profile__chat">
               <Box className="profile__chat-messages">
-                <Box className='profile__chat-dev'>
-                  <Text as='h3'>Dmitry</Text>
-                  <Box>Welcome, John!</Box>
-                </Box>
-                <Box className='profile__chat-me'>
-                  <Text as='h3'>Me</Text>
-                  <Box>Hello!</Box>
-                </Box>
-                <Box className='profile__chat-dev'>
-                  <Text as='h3'>Dmitry</Text>
-                  <Box>Welcome, John!</Box>
-                </Box>
-                <Box className='profile__chat-me'>
-                  <Text as='h3'>Me</Text>
-                  <Box>Hello!</Box>
-                </Box>
+                {
+                  suppMes.map((item: any, i: number) => {
+                    const isYou: Boolean = item.authorId === data._id?.toString();
+                    return (
+                      <Box className={
+                        isYou ? 'profile__chat-dev' : 'profile__chat-me'
+                      } key={i}>
+                        <Text as='h3'>{isYou ? data.name : 'Dmitry'}</Text>                                                         
+                        <Box>{item.text}</Box>
+                      </Box>
+                    )
+                  })
+                }
+                <Box ref={messageList} />
               </Box>
               <Box className="profile__chat-text">
-                <Textarea placeholder='Write your message' />
+                <Textarea placeholder='Write your message' onChange={
+                  (e) => {setTextMessage(e.target.value)}
+                } />
                 <Image src={SendIcon} alt='send' onClick={sendMessage} />
               </Box>
-            </Box>
+            </Box> */}
           </Box>
           <Box className="profile__create">
             <Text as='h3'>Create your own conference</Text>
@@ -218,5 +226,71 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
       </Box>
       <AnimatePresence>{openCreateConf ? (<CreateConf user={data} />) : null}</AnimatePresence>
     </Fragment>
+  )
+}
+
+const SupportChat = ({data}: {data: IUserData}) => {
+  const [suppMes, setSuppMes] = useState(data.supportMessages);
+  // const [messageLoading, setMessageLoading] = useState<Boolean>(false);
+  const [textMessage, setTextMessage] = useState<string>('');
+  const messageList: any = useRef();
+  const chatParent = useRef<HTMLDivElement>(null);
+  const [send, setSend] = useState<Boolean>(false);
+
+  const scrollBottom = () => {
+    const domNode = chatParent.current;
+    if (domNode) {
+      domNode.scrollTop = domNode.scrollHeight;
+    }
+  }
+
+  useEffect(() => {
+    if (textMessage.length !== 0) {setSend(true)}
+    else {setSend(false)};
+  }, [textMessage])
+
+  useEffect(() => {
+    socket.on('events', (data: any) => {
+      setSuppMes(prev => [...prev, data]);
+      // setMessageLoading(false);
+      scrollBottom();
+      setTextMessage('');
+    });
+    scrollBottom();
+  }, []);
+
+  const sendMessage = (): void => {
+    if (textMessage.length !== 0) {
+      // setMessageLoading(true);
+      socket.emit('events', {authorId: data._id?.toString(), text: textMessage});
+    }
+  }
+
+  return (
+    <Box w='100%' h='100%' className="profile__chat">
+      <Box className="profile__chat-messages" ref={chatParent}>
+        {
+          suppMes.map((item: any, i: number) => {
+            const isYou: Boolean = item.authorId === data._id?.toString();
+            return (
+              <Box className={
+                isYou ? 'profile__chat-dev' : 'profile__chat-me'
+              } key={i} mt={i === 0 ? '0px' : '15px'}>
+                <Text as='h3'>{isYou ? data.name : 'Dmitry'}</Text>                                                         
+                <Box>{item.text}</Box>
+              </Box>
+            )
+          })
+        }
+        <Box ref={messageList} />
+      </Box>
+      <Box className="profile__chat-text">
+        <Textarea placeholder='Write your message' onChange={
+          (e) => {setTextMessage(e.target.value)}
+        } value={textMessage} />
+        <Image src={SendIcon} alt='send' opacity={send ? '1' : '0.5'} 
+        cursor={send ? 'pointer' : 'default'} onClick={sendMessage} />
+      </Box>
+    </Box>
   )
 }
