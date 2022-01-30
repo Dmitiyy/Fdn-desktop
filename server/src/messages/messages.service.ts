@@ -14,7 +14,7 @@ export class MessagesService {
 
   async createMessage(data: CreateMessageDto): Promise<Message> {
     const createdMessage = await this.messageModel.create({
-      text: data.text, authorId: data.authorId, createdAt: Date.now()
+      text: data.text, authorId: data.authorId, createdAt: Date.now(), answer: data.answer
     });
     await this.userService.addMessageUser(data.authorId, createdMessage);
     return createdMessage;

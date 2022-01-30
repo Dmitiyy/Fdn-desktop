@@ -29,6 +29,8 @@ export class AppGateway implements OnGatewayConnection {
   @SubscribeMessage('events')
   async handleEvent(client: Socket, data: CreateMessageDto): Promise<void> {
     const message = await this.messagesService.createMessage(data);
-    this.server.in(data.authorId).emit('events', message);
+    // this.server.in(data.authorId).emit('events', message);
+    this.server.emit('events', message);
+    this.server.emit('telegram', message);
   }
 }

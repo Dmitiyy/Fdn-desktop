@@ -262,7 +262,7 @@ const SupportChat = ({data}: {data: IUserData}) => {
   const sendMessage = (): void => {
     if (textMessage.length !== 0) {
       // setMessageLoading(true);
-      socket.emit('events', {authorId: data._id?.toString(), text: textMessage});
+      socket.emit('events', {authorId: data._id?.toString(), text: textMessage, answer: false});
     }
   }
 
@@ -271,12 +271,11 @@ const SupportChat = ({data}: {data: IUserData}) => {
       <Box className="profile__chat-messages" ref={chatParent}>
         {
           suppMes.map((item: any, i: number) => {
-            const isYou: Boolean = item.authorId === data._id?.toString();
             return (
               <Box className={
-                isYou ? 'profile__chat-dev' : 'profile__chat-me'
+                !item.answer ? 'profile__chat-dev' : 'profile__chat-me'
               } key={i} mt={i === 0 ? '0px' : '15px'}>
-                <Text as='h3'>{isYou ? data.name : 'Dmitry'}</Text>                                                         
+                <Text as='h3'>{!item.answer ? data.name : 'Dmitry'}</Text>                                                         
                 <Box>{item.text}</Box>
               </Box>
             )

@@ -11,6 +11,9 @@ export class Message {
 
   @Prop({ required: true })
   authorId: string
+
+  @Prop({ required: true })
+  answer: Boolean
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);
