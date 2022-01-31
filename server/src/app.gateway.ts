@@ -24,13 +24,18 @@ export class AppGateway implements OnGatewayConnection {
 
   handleConnection(client: Socket) {
     client.on('events', (data: CreateMessageDto) => { client.join(data.authorId) });
+    client.on('join', (data: CreateMessageDto) => { client.join(data.authorId) });
   }
 
   @SubscribeMessage('events')
   async handleEvent(client: Socket, data: CreateMessageDto): Promise<void> {
     const message = await this.messagesService.createMessage(data);
-    // this.server.in(data.authorId).emit('events', message);
-    this.server.emit('events', message);
+    this.server.to(data.authorId).emit('events', message);
     this.server.emit('telegram', message);
+  }
+
+  @SubscribeMessage('join')
+  async handleJoin(client: Socket, data: CreateMessageDto): Promise<void> {
+    this.server.to(data.authorId);
   }
 }

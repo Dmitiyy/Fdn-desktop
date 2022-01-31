@@ -235,7 +235,7 @@ const SupportChat = ({data}: {data: IUserData}) => {
   const [textMessage, setTextMessage] = useState<string>('');
   const messageList: any = useRef();
   const chatParent = useRef<HTMLDivElement>(null);
-  const [send, setSend] = useState<Boolean>(false);
+  const messageText = useRef<HTMLTextAreaElement>(null);
 
   const scrollBottom = () => {
     const domNode = chatParent.current;
@@ -245,24 +245,22 @@ const SupportChat = ({data}: {data: IUserData}) => {
   }
 
   useEffect(() => {
-    if (textMessage.length !== 0) {setSend(true)}
-    else {setSend(false)};
-  }, [textMessage])
-
-  useEffect(() => {
     socket.on('events', (data: any) => {
       setSuppMes(prev => [...prev, data]);
       // setMessageLoading(false);
       scrollBottom();
       setTextMessage('');
     });
+    socket.emit('join', {authorId: data._id?.toString()});
     scrollBottom();
   }, []);
 
   const sendMessage = (): void => {
-    if (textMessage.length !== 0) {
+    if (messageText.current?.value.length !== 0) {
       // setMessageLoading(true);
-      socket.emit('events', {authorId: data._id?.toString(), text: textMessage, answer: false});
+      socket.emit('events', {
+        authorId: data._id?.toString(), text: messageText.current?.value, answer: false
+      });
     }
   }
 
@@ -284,11 +282,8 @@ const SupportChat = ({data}: {data: IUserData}) => {
         <Box ref={messageList} />
       </Box>
       <Box className="profile__chat-text">
-        <Textarea placeholder='Write your message' onChange={
-          (e) => {setTextMessage(e.target.value)}
-        } value={textMessage} />
-        <Image src={SendIcon} alt='send' opacity={send ? '1' : '0.5'} 
-        cursor={send ? 'pointer' : 'default'} onClick={sendMessage} />
+        <Textarea placeholder='Write your message' ref={messageText} />
+        <Image src={SendIcon} alt='send' onClick={sendMessage} />
       </Box>
     </Box>
   )
