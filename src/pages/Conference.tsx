@@ -40,12 +40,14 @@ export const Conference = () => {
   }, [profileData]);
 
   const handleJoin = (): void => {
-    const result = {
-      conferenceId: data._id,
-      userId: profileData._id,
-      delete: joined
-    };
-    joinTrigger(result);
+    if (profileData) {
+      const result = {
+        conferenceId: data._id,
+        userId: profileData._id,
+        delete: joined
+      };
+      joinTrigger(result);
+    } else {navigate('/profile')};
   }
 
   const handleRemoveConference = (): void => {
@@ -60,12 +62,13 @@ export const Conference = () => {
           <Box>
             <Box className="conf__info-photo" w='600px' h='330px' bg={`url(${data.photo})`} />
             <Flex mt='29px' w='100%' flexDirection='column'>
-              <Box className='conf__author' p='26px' w='437px' h='200px' bg='#fff'>
+              <Box className='conf__author' p='26px' w='100%' h='200px' bg='#fff'>
+                <Text as='p' fontWeight='bold'>Author</Text>
                 <Flex>
-                  <Box className="conf__author-img" w='148px' h='147px' bg={`url(${data.author.photo})`} />
-                  <Box className="conf__author-text">
+                  {/* <Box className="conf__author-img" w='148px' h='147px' bg={`url(${data.author.photo})`} /> */}
+                  <Box className="conf__author-text" mt='-20px'>
                     <Text as='p'>{data.author.name}</Text>
-                    <Text as='p' mt='10px'>{data.author.description}</Text>
+                    {/* <Text as='p' mt='10px'>{data.author.description}</Text> */}
                     <Text as='p' mt='10px'>{data.author.timezon}</Text>
                   </Box>
                 </Flex>

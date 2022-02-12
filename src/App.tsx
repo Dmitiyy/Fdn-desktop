@@ -27,10 +27,10 @@ function App() {
   const [activeLink, setActiveLink] = useState<number>(0);
 
   return (
-    <Container maxW='1180px' mt='30px' mb='30px'>
+    <Container maxW='1180px' mt='30px' mb='30px' className='mainContainer'>
       <Flex>
         <Box d='flex' flexDirection='column' alignItems='center'
-        height='100%'
+        height='100%' className='mainNavigation'
         position='sticky' top='30px'>
           <Image src={Logo} alt='logo' />
           {
@@ -51,7 +51,7 @@ function App() {
             })
           }
         </Box>
-        <Box ml='26px'>
+        <Box ml='26px' w='100%' className='home__container'>
           <AnimatePresence>
             <Routes>
               <Route path='/' element={<Home />} />
@@ -61,9 +61,9 @@ function App() {
           </AnimatePresence>
         </Box>
       </Flex>
-      <Flex as='footer' w='100%' h='70px' className='center'
+      <Flex as='footer' w='100%' h='70px' className='center footer'
       bg='#3A4E7A' borderRadius='12px' mt='50px'>
-        <Text as='p' color='#fff' fontSize='18px' fontWeight='400'>
+        <Text as='p' color='#fff' fontSize='18px' fontWeight='400' className='footer-text'>
           © 2021 Fdn - All rights reserved
         </Text>
       </Flex>

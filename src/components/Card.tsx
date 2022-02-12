@@ -73,10 +73,11 @@ export const Card = (cardData: ICard) => {
 
   const handleLike = () => {
     setLike(!like);
+
     if (cardData.profileId._id) {
       const data = {userId: cardData.profileId._id, conferenceId: cardData.id};
       likeTrigger(data);
-    }
+    } else {navigate('/profile')};
   }
 
   return (

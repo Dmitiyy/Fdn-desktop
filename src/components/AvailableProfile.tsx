@@ -1,6 +1,7 @@
 import { Box, Text, Flex, Image, Grid, Textarea } from "@chakra-ui/react";
 import { AnimatePresence } from 'framer-motion';
 import * as io from "socket.io-client";
+import { useCookies } from "react-cookie";
 import ProfileMainPhoto from '../images/profile_main.png';
 import { useDispatch } from "react-redux";
 import BinIcon from '../images/bin.svg';
@@ -26,28 +27,12 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
   const createdConferences = useAppSelector(state => state.user.createdConfs);
   const openCreateConf = useAppSelector(state => state.user.openModal);
   const [removeYourTrigger] = useRemoveYourMutation();
-  // const [suppMes, setSuppMes] = useState(data.supportMessages);
-  // const [messageLoading, setMessageLoading] = useState<Boolean>(false);
-  // const [textMessage, setTextMessage] = useState<string>('');
-  // const messageList: any = useRef();
+  const [,, removeCookie] = useCookies(['token']);
   
   useEffect(() => {setLikedConferences(data.likedConferences)}, [data.likedConferences]);
   useEffect(() => {
     dispatch(setDataDefault({ini: 'createdConfs', data: data.conferences}));
   }, [data.conferences]);
-  
-  // useEffect(() => {
-  //   socket.on('events', (data: any) => {
-  //     setSuppMes(prev => [...prev, data]);
-  //     setMessageLoading(false);
-  //     messageList.current.scrollIntoView({ behavior: 'smooth' });
-  //   });
-  // }, []);
-
-  // const sendMessage = (): void => {
-  //   setMessageLoading(true);
-  //   socket.emit('events', {authorId: data._id?.toString(), text: textMessage});
-  // }
 
   const openConference = (conference: any): void => {
     const cardData = {
@@ -79,6 +64,11 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
     removeYourTrigger(result);
     const filteredConferences = data.conferences.filter(item => item._id !== id);
     dispatch(setDataDefault({ini: 'createdConfs', data: filteredConferences}));
+  }
+
+  const logOutHandler = (): void => {
+    removeCookie('token');
+    navigate('/');
   }
   
   return (
@@ -184,39 +174,16 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
                 ) : (<NoAvatar className="no-avatar" />)
               }
               <Box>
-                <Text as='h3'>{data.name}</Text>
-                <Text as='p'>{data.job}</Text>
+                <Text as='h3' mt='20px !important'>{data.name}</Text>
+                {/* <Text as='p'>{data.job}</Text> */}
               </Box>
             </Flex>
-            <Image src={LogOutIcon} alt='logout' className="profile__logout-icon" />
+            <Image src={LogOutIcon} alt='logout' className="profile__logout-icon"
+            onClick={logOutHandler} />
           </Flex>
           <Box className="profile_support">
             <Text as='h3'>Support service</Text>
             <SupportChat data={data} />
-            {/* <Box w='100%' h='100%' className="profile__chat">
-              <Box className="profile__chat-messages">
-                {
-                  suppMes.map((item: any, i: number) => {
-                    const isYou: Boolean = item.authorId === data._id?.toString();
-                    return (
-                      <Box className={
-                        isYou ? 'profile__chat-dev' : 'profile__chat-me'
-                      } key={i}>
-                        <Text as='h3'>{isYou ? data.name : 'Dmitry'}</Text>                                                         
-                        <Box>{item.text}</Box>
-                      </Box>
-                    )
-                  })
-                }
-                <Box ref={messageList} />
-              </Box>
-              <Box className="profile__chat-text">
-                <Textarea placeholder='Write your message' onChange={
-                  (e) => {setTextMessage(e.target.value)}
-                } />
-                <Image src={SendIcon} alt='send' onClick={sendMessage} />
-              </Box>
-            </Box> */}
           </Box>
           <Box className="profile__create">
             <Text as='h3'>Create your own conference</Text>
