@@ -16,6 +16,8 @@ import { setDataDefault } from "../redux/reducer";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { CreateConf } from "./CreateConf";
 import {ReactComponent as NoAvatar} from '../images/no_avatar.svg';
+import { MobileNavigation } from './MobileNavigation';
+import { BurgerMenu } from "../components/BurgerMenu";
 
 const socket = io.connect('http://localhost:3001/');
 
@@ -73,8 +75,9 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
   
   return (
     <Fragment>
-      <Box d='flex'>
-        <Box w='734px' mr='26px'>
+      <BurgerMenu />
+      <Box d='flex' className='availableProfile'>
+        <Box w='734px' mr='26px' className='availableProfile__main'>
           <Text as='h2' className="profile__hello" mb='5px' mt='-7px'>Hello, {data.name}</Text>
           <Text as='p' className="profile__hello-descr">Don't wait, start your conference right now</Text>
           <Flex className="profile__baner" h='216px'>
@@ -93,7 +96,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
                   You don't have any conference, create frist one <Text as='span'>here</Text>
                 </Text>
               ) : (
-                <Grid templateColumns='repeat(3, 1fr)' gap='37px'>
+                <Grid templateColumns='repeat(3, 1fr)' gap='37px' className='availableProfile__card-container'>
                   {
                     createdConferences.map((item: any) => {
                       return (
@@ -136,7 +139,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
                   You don't have any liked conference
                 </Text>
               ) : (
-                <Grid templateColumns='repeat(3, 1fr)' gap='37px' mt='40px'>
+                <Grid templateColumns='repeat(3, 1fr)' gap='37px' mt='40px' className='availableProfile__card-container'>
                   {
                     likedConferences.map(item => {
                       return (
@@ -165,7 +168,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
             }
           </Box>
         </Box>
-        <Box w='297px'>
+        <Box w='297px' className="availableProfile__bar">
           <Flex justifyContent='space-between'>
             <Flex className="profile__ava">
               {
@@ -192,6 +195,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
         </Box>
       </Box>
       <AnimatePresence>{openCreateConf ? (<CreateConf user={data} />) : null}</AnimatePresence>
+      <MobileNavigation />
     </Fragment>
   )
 }

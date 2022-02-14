@@ -137,19 +137,20 @@ export const CreateConf = ({user}: {user: IUserData}) => {
 
                   <Box className="create__modal-item">
                     <Text as='label' htmlFor="day">Date (like 01.02.2022)</Text>
-                    <Flex justifyContent='space-between' className="create__modal-small">
+                    <Box justifyContent='space-between' 
+                    className="create__modal-small create__modal-smallMobile">
                       <CustomInput name='day' type='text' 
                       errors={errors} touched={touched} placeholder="Day" />
                       <CustomInput name='month' type='text' 
                       errors={errors} touched={touched} placeholder="Month" />
                       <CustomInput name='year' type='text' 
                       errors={errors} touched={touched} placeholder="Year" />
-                    </Flex>
+                    </Box>
                   </Box>
 
                   <Box className="create__modal-item">
                     <Text as='label' htmlFor="photo">Photo</Text>
-                    <Flex justifyContent='space-between'>
+                    <Flex justifyContent='space-between' className="create__modal-selectContainer">
                       <Button id='photo' className="create__modal-select"
                       border={fileError ? '2px solid rgb(218, 126, 126)' : ''}>
                         <Text as='h3'>{fileName}</Text>

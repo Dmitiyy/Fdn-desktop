@@ -47,6 +47,7 @@
       textarea
         max-height: 200px
       .create__modal-small
+        display: flex
         input
           width: 154px
     &-select
@@ -108,3 +109,22 @@
 ::placeholder
   font-family: 'Montserrat', sans-serif !important
   color: rgba(0, 0, 0, 0.5) !important
+
+@media (max-height: 1380px)
+  .create__modal
+    height: calc(100vh - 50px)
+
+@media (max-width: 588px) and (min-width: 300px)
+  .create__modal
+    width: 90%
+  .create__modal-smallMobile
+    width: 100% !important
+    flex-direction: column !important
+    input
+      width: 100% !important
+  .create__modal-selectContainer
+    flex-direction: column
+    button
+      width: 100% !important
+    .create-btn
+      margin-top: 20px

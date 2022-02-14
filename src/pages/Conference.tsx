@@ -7,6 +7,8 @@ import { useProfile } from "../hooks/useProfile";
 import { useAppSelector } from "../redux";
 import { useJoinConferenceMutation } from '../redux/conferencesApi';
 import { useRemoveYourMutation } from "../redux/userApi";
+import { MobileNavigation } from "../components/MobileNavigation";
+import { BurgerMenu } from "../components/BurgerMenu";
 
 export const Conference = () => {
   const data = useAppSelector(state => state.user.certainConference);
@@ -56,7 +58,8 @@ export const Conference = () => {
   
   return (
     <motion.div {...configAnimationPage}>
-      <Box w='1057px'>
+      <Box w='1057px' minH='100vh' className='conf-main'>
+        <BurgerMenu />
         <Text as='h2' className="conf-name">{data.name}</Text>  
         <Flex className="conf__info" mt='26px'>
           <Box>
@@ -122,6 +125,7 @@ export const Conference = () => {
           </Box>
         </Flex>
       </Box>
+      <MobileNavigation />
     </motion.div>
   )
 }

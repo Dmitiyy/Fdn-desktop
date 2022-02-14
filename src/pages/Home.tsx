@@ -1,14 +1,14 @@
 import { Fragment, useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
 import { Box, Flex, Image, Text, Grid } from "@chakra-ui/react";
 import { Card } from "../components/Card";
 import MainPhoto from '../images/main.png';
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { configAnimationPage } from "../App";
 import { useGetAllConferencesMutation } from "../redux/conferencesApi";
 import LoadingSvg from '../images/loading.svg';
 import { useProfile } from "../hooks/useProfile";
-import Logo from '../images/logo.png';
+import { MobileNavigation } from "../components/MobileNavigation";
+import { BurgerMenu } from "../components/BurgerMenu";
 
 export interface IConference {
   _id: string,
@@ -29,7 +29,6 @@ export const Home = () => {
   const [generatedData, setGeneratedData] = useState<Array<IConference>>([]);
   const {profileData, profileLoading} = useProfile();
   const [profileId, setProfileId] = useState({});
-  const [isModalOpen, setIsModalOpen] = useState<Boolean>(false);
   
   useEffect(() => {
     if (profileData) {
@@ -52,15 +51,10 @@ export const Home = () => {
     }
   }, [data]);
 
-  const handleModalOpen = (): void => {setIsModalOpen(!isModalOpen)};
-
   return (
     <motion.div {...configAnimationPage}>
       <Box w='1057px' minH='100vh' className="home">
-        <Box className="home__navMobile" onClick={handleModalOpen}>
-          <Image src={Logo} alt='logo' />
-          <Box><Box /><Box /><Box /></Box>
-        </Box>
+        <BurgerMenu />
         <Box w='100%' h='290px' bg='#3A4E7A' borderRadius='12px' className='home__baner-container'>
           <Flex justifyContent='space-evenly' alignItems='center' h='100%' className='home__banner-box'>
             <Box w='591px' className="home__baner-text">
@@ -112,22 +106,7 @@ export const Home = () => {
           }
         </Box>
       </Box>
-      <AnimatePresence>
-        {
-          isModalOpen ? (
-            <motion.div {...configAnimationPage}>
-              <Box className='home__nav-modal' onClick={(event: any) => {
-                if (event.target.className.split(' ').includes('home__nav-modal')) {
-                  handleModalOpen();
-                }
-              }}>
-                <Link to='/'>Home</Link>
-                <Link to='/profile'>Profile</Link>
-              </Box>
-            </motion.div>
-          ) : null
-        }
-      </AnimatePresence>
+      <MobileNavigation />
     </motion.div>
   )
 }
