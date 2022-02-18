@@ -99,8 +99,11 @@ export const Conference = () => {
             </Text>
             {
               yourConf ? (
-                <Button as='button' className='conf__info-btn' mt='23px' w='100%' 
-                disabled={removedLoading} onClick={handleRemoveConference}>Delete conference</Button>
+                <Fragment>
+                  <Button as='button' className='conf__info-btn' mt='23px' w='100%' 
+                  disabled={removedLoading} onClick={handleRemoveConference}>Delete conference</Button>
+                  <Text as='p' className='conf__info-descr' mt='21px'>{data.conferenceLink}</Text>
+                </Fragment>
               ) : !joined ? (
                 <Button as='button' className='conf__info-btn' mt='23px' w='100%' disabled={isLoading}
                 onClick={() => {

@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     cors: true,
   });
-  app.use(bodyParser.json({limit: '50mb'}));
-  await app.listen(3001);
+  app.use(bodyParser.json({ limit: '50mb' }));
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

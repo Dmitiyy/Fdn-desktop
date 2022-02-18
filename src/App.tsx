@@ -1,5 +1,5 @@
-import { Fragment, useState } from 'react';
-import {Routes, Route, Link, NavLink} from 'react-router-dom';
+import { Fragment } from 'react';
+import {Routes, Route, Navigate, NavLink} from 'react-router-dom';
 import { 
   Box, 
   Container, 
@@ -35,15 +35,15 @@ function App() {
           <Image src={Logo} alt='logo' />
           {
             [
-              {photo: HomeIcon, path: '/', id: 1},
+              {photo: HomeIcon, path: '/home', id: 1},
               {photo: ProfileIcon, path: '/profile', id: 2},
               // {photo: SearchIcon, path: '/search', id: 3}
             ].map((item, i) => {
               return (
                 <Fragment key={item.id}>
                   <NavLink to={item.path} className={(navData) => {
-                      return navData.isActive ? 'home-link home-link-active' : 'home-link';
-                    }}>
+                    return navData.isActive ? 'home-link home-link-active' : 'home-link';
+                  }}>
                     <BtnNav img={item.photo} />
                   </NavLink>
                 </Fragment>
@@ -54,9 +54,11 @@ function App() {
         <Box ml='26px' w='100%' className='home__container'>
           <AnimatePresence>
             <Routes>
-              <Route path='/' element={<Home />} />
+              <Route path='/home' element={<Home />} />
               <Route path='/profile' element={<Profile />} />
-              <Route path='/conference' element={<Conference />} />
+              <Route path='/home/conference' element={<Conference />} />
+              <Route path='/profile/conference' element={<Conference />} />
+              <Route path='*' element={<Navigate to='/home' />} />
             </Routes>
           </AnimatePresence>
         </Box>

@@ -19,7 +19,8 @@ import {ReactComponent as NoAvatar} from '../images/no_avatar.svg';
 import { MobileNavigation } from './MobileNavigation';
 import { BurgerMenu } from "../components/BurgerMenu";
 
-const socket = io.connect('http://localhost:3001/');
+const socketUrl: any = process.env.REACT_APP_API_BASE_URL;
+const socket = io.connect(socketUrl);
 
 export const AvailableProfile = ({data}: {data: IUserData}) => {
   const navigate = useNavigate();
@@ -43,7 +44,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
       cardTime: transformTime(new Date(conference.time))
     };
     dispatch(setDataDefault({ini: 'certainConference', data: cardData}));
-    navigate('/conference');
+    navigate('/profile/conference');
   }
 
   const removeConference = (conference: any) => {
@@ -224,6 +225,10 @@ const SupportChat = ({data}: {data: IUserData}) => {
     });
     socket.emit('join', {authorId: data._id?.toString()});
     scrollBottom();
+
+    return () => {
+      socket.off('events');
+    }
   }, []);
 
   const sendMessage = (): void => {

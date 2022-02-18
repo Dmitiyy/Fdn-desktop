@@ -63,7 +63,7 @@ export const Card = (cardData: ICard) => {
         cardTime: transformTime(iniDate)
       };
       dispatch(setDataDefault({ini: 'certainConference', data: cardData}));
-      navigate('/conference');
+      navigate('/home/conference');
     }
   }, [data]);
 
