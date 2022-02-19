@@ -7,6 +7,8 @@ import * as Yup from 'yup';
 import { useCookies } from 'react-cookie';
 import { Fragment, useEffect } from "react";
 import { useRegistrationMutation } from "../redux/registrationApi";
+import { MobileNavigation } from './MobileNavigation';
+import { BurgerMenu } from "../components/BurgerMenu";
 
 interface IFormik {
   name: string;
@@ -36,7 +38,8 @@ export const SignUp = () => {
 
   return (
     <>
-      <Flex w='100%' h='100vh' flexDirection='column' className="center">
+      <BurgerMenu />
+      <Flex w='100%' h='100vh' flexDirection='column' className="reg-center center">
         <Formik initialValues={initialValues} validationSchema={validationSchema}
         onSubmit={(values) => {
           signUpTrigger({...values, url: 'register'}).unwrap();
@@ -77,6 +80,7 @@ export const SignUp = () => {
           meet new people and much more. So, please register
         </Text>
       </Flex>
+      <MobileNavigation />
     </>
   )
 }

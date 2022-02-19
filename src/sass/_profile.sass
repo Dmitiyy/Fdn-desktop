@@ -425,7 +425,7 @@
     width: 100% !important
   .profile__chat-text
     textarea
-      width: 93%
+      width: 91%
   .profile-container
     width: 100% !important
   .profile__baner
@@ -463,7 +463,7 @@
     width: 100% !important
   .profile__chat-text
     textarea
-      width: 93%
+      width: 86%
   .profile-container
     width: 100% !important
   .profile__baner
@@ -494,3 +494,28 @@
   .availableProfile__card-container
     grid-template-columns: repeat(1, 220px) !important
     justify-content: center
+
+@media (max-width: 350px)
+  .profile__chat-text
+    textarea
+      width: 83%
+
+@media (max-width: 940px) and (min-width: 761px)
+  .register
+    width: 100%
+  .register-descr
+    width: 100%
+
+@media (max-width: 760px) and (min-width: 300px)
+  .register
+    width: 100%
+  .register-descr
+    width: 100%
+    margin-bottom: 0 !important
+  .reg-center
+    justify-content: flex-start
+    height: 100% !important
+    align-items: flex-start
+
+  .profile-container
+    min-height: calc(100vh - 200px) !important
