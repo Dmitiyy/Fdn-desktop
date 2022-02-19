@@ -84,7 +84,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
           <Flex className="profile__baner" h='216px'>
             <Box>
               <Text as='h2'>You have a premium account</Text>
-              <Text as='p' mt='5px'>Subscription is valid for another 10 days</Text>
+              <Text as='p' mt='5px'>Subscription is valid for another 0 days</Text>
               <Box as='button'>Buy more here</Box>
             </Box>
             <Image src={ProfileMainPhoto} alt='profile_main' />
