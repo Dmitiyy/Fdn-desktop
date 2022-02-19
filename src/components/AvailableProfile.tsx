@@ -94,7 +94,7 @@ export const AvailableProfile = ({data}: {data: IUserData}) => {
             {
               createdConferences.length === 0 ? (
                 <Text as='p' className="profile__no-conf">
-                  You don't have any conference, create frist one <Text as='span'>here</Text>
+                  You don't have any conference, create frist one
                 </Text>
               ) : (
                 <Grid templateColumns='repeat(3, 1fr)' gap='37px' className='availableProfile__card-container'>
